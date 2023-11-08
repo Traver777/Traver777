@@ -1,72 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Loja de Tecnologia</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f3f3f3;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #fff;
-      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-      padding: 20px 30px;
-    }
-    header h1 {
-      margin: 0;
-    }
-    nav {
-      background-color: #007bffa8;
-      padding: 10px 30px;
-    }
-    nav ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      justify-content: space-between;
-    }
-    nav ul li a {
-      color: #fff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    main {
-      background-color: #fff;
-      max-width: 900px;
-      margin: 40px auto;
-      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      border-radius: 3px;
-    }
-    footer {
-      background-color: #fff;
-      box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
-      padding: 20px 30px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-  </style>
+   <title>Our Simple Online Store</title>
 </head>
 <body>
-  <header>
-    <h1>Loja de Tecnologia</h1>
-  </header>
-  <nav>
-    <ul>
-      <li><a href="#">Smartphones</a></li>
-      <li><a href="#">Computadores</a></li>
-    </ul>
-  </nav>
-  <main>
-    <!-- Produtos iriam aqui -->
-  </main>
-  <footer>
-    <p>&copy; 2022 Loja de Tecnologia</p>
-  </footer>
+   <h1>Welcome to our Online store</h1>
+   <h2>Look at our amazing products</h2>
+
+   <div id='product-list'>
+      <div class='product-item'>
+         <h3>Product 1</h3>
+         <p>Price: $10</p>
+         <button onclick='buyProduct("Product 1", 10)'>Buy Now</button>
+      </div>
+
+      <div class='product-item'>
+         <h3>Product 2</h3>
+         <p>Price: $15</p>
+         <button onclick='buyProduct("Product 2", 15)'>Buy Now</button>
+      </div>
+
+      <div class='product-item'>
+         <h3>Product 3</h3>
+         <p>Price: $20</p>
+         <button onclick='buyProduct("Product 3", 20)'>Buy Now</button>
+      </div>
+   </div>
 </body>
 </html>
 
