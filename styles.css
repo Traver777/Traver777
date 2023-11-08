@@ -1,0 +1,21 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+#produtos {
+  display: flex;
+  justify-content: center;
+}
+
+.produto {
+  margin: 10px;
+}
+
+#carrinho {
+  margin-top: 50px;
+  text-align: center;
+}
