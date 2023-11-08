@@ -1,21 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Website de Notícias</title>
+    <style>
+        .newspost {
+            border: 2px solid black;
+            margin: 20px;
+            padding: 20px;
+            width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body>
-  <h1>Loja Virtual</h1>
-  <div id="produtos">
-    <div class="produto">
-      <h2>Produto 1</h2>
-      <button onclick="adicionarAoCarrinho('Produto 1')">Adicionar ao carrinho</button>
+
+    <h1>Website de Notícias - Painel Administrativo</h1>
+
+    <div id="newsPanel">
+
     </div>
-    <div class="produto">
-      <h2>Produto 2</h2>
-      <button onclick="adicionarAoCarrinho('Produto 2')">Adicionar ao carrinho</button>
+
+    <div>
+        <input id="newsTitle" type="text" placeholder="Título da Notícia" />
+        <textarea id="newsContent" placeholder="Conteúdo da Notícia"></textarea>
+        <button onclick="postNews()">Postar Notícia</button>
     </div>
-  </div>
-  <div id="carrinho"></div>
-  <script src="scripts.js"></script>
+
+    <script>
+        function postNews() {
+            var title = document.getElementById("newsTitle").value;
+            var content = document.getElementById("newsContent").value;
+
+            var newPost = document.createElement("div");
+            newPost.className = "newspost";
+            newPost.innerHTML = "<h2>" + title + "</h2>" + "<p>" + content + "</p>";
+
+            var panel = document.getElementById("newsPanel")
+            panel.prepend(newPost);
+
+            document.getElementById("newsTitle").value = '';
+            document.getElementById("newsContent").value = '';
+        }
+    </script>
 </body>
 </html>
