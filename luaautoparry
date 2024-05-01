@@ -248,7 +248,6 @@ end)
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
-pre2:Disconnect()
 pre3:Disconnect()
 pre4:Disconnect()
 pre5:Disconnect()
