@@ -46,7 +46,6 @@ local pre = nil
 local pre2 = nil
 local pre3 = nil
 local pre4 = nil
-local pre5 = nil
 local spam = false
 local tg = true
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
@@ -243,17 +242,11 @@ if spam == true and realBall and realBall.Parent and realOther and realOther.Par
 parry:FireServer(unpack(args))
 end
 end)
-pre5 = sim:Connect(function()
-if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
-parry:FireServer(unpack(args))
-end
-end)
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
 pre3:Disconnect()
 pre4:Disconnect()
-pre5:Disconnect()
 end)
 
 Frame.Active = true
