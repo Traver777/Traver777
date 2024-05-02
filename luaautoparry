@@ -13,10 +13,7 @@ local ToggleZOFF = Instance.new("TextButton")
 local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
-local sim = run.PreRender
-local sim3 = run.Stepped
-local sim4 = run.RenderStepped
-local sim5 = run.Heartbeat
+local sim = run.RenderStepped
 local camera = workspace.CurrentCamera
 local direcaoDaCamera = camera.CFrame.LookVector
 local posicaoDaCamera = camera.CFrame
@@ -218,12 +215,12 @@ checkNoMiss()
 end
 
 Toggle.MouseButton1Click:Connect(function()
-pre = sim4:Connect(function()
+pre = sim:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
-pre2 = sim3:Connect(function()
+pre2 = sim:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
@@ -236,7 +233,7 @@ pre2:Disconnect()
 end)
 
 ToggleZ.MouseButton1Click:Connect(function()
-pre3 = sim5:Connect(newAll)
+pre3 = sim:Connect(newAll)
 pre4 = sim:Connect(function()
 if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
