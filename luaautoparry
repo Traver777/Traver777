@@ -13,7 +13,8 @@ local ToggleZOFF = Instance.new("TextButton")
 local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
-local sim = run.RenderStepped
+local sim = run.Heartbeat
+local sim2 = run.RenderStepped
 local camera = workspace.CurrentCamera
 local direcaoDaCamera = camera.CFrame.LookVector
 local posicaoDaCamera = camera.CFrame
@@ -186,9 +187,9 @@ local opponentTorso = opponent.HumanoidRootPart
 local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
 local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
 local requiredDistance = 20 + (ballVelocity / 2 - ballVelocity / 10)
-local spamDistance = 25 + (ballVelocity / 9)
+local spamDistance = 25 + (ballVelocity / 8.5)
 local spamDistanceLimit = 30 + (ballVelocity / 10)
-local safeDistance = 25 + (ballVelocity / 9)
+local safeDistance = 25 + (ballVelocity / 8.5)
 if targ ~= playerW then
 tg = true
 end
@@ -215,12 +216,12 @@ checkNoMiss()
 end
 
 Toggle.MouseButton1Click:Connect(function()
-pre = sim:Connect(function()
+pre = sim2:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
-pre2 = sim:Connect(function()
+pre2 = sim2:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
@@ -234,7 +235,7 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 pre3 = sim:Connect(newAll)
-pre4 = sim:Connect(function()
+pre4 = sim2:Connect(function()
 if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
