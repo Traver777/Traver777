@@ -14,7 +14,6 @@ local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.PreRender
-local sim2 = run.PostSimulation
 local sim3 = run.Stepped
 local sim4 = run.RenderStepped
 local sim5 = run.Heartbeat
@@ -193,7 +192,7 @@ local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitu
 local requiredDistance = 20 + (ballVelocity / 2 - ballVelocity / 10)
 local spamDistance = 25 + (ballVelocity / 10)
 local spamDistanceLimit = 30 + (ballVelocity / 10)
-local safeDistance = 25 + (ballVelocity / 8)
+local safeDistance = 25 + (ballVelocity / 10)
 if targ ~= playerW then
 tg = true
 end
@@ -238,8 +237,12 @@ pre2:Disconnect()
 end)
 
 ToggleZ.MouseButton1Click:Connect(function()
-pre3 = sim2:Connect(newAll)
-pre4 = sim5:Connect(newAll)
+pre3 = sim5:Connect(newAll)
+pre4 = sim:Connect(function()
+if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
+end
+end)
 pre5 = sim:Connect(function()
 if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
