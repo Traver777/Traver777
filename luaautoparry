@@ -1,4 +1,4 @@
-local players = game:WaitForChild("Players")
+local players = game.Players
 local playerF = players.LocalPlayer
 local playerW = playerF.Name
 
@@ -144,7 +144,6 @@ end)
 
 ToggleFOFF.MouseButton1Click:Connect(function()
 focus = nil
-otherf = nil
 end)
 
 ToggleZ.Name = "Toggle"
