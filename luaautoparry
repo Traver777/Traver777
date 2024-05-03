@@ -23,6 +23,7 @@ local realBall = nil
 local realPlayer = nil
 local realOther = nil
 local rootpart = nil
+local otherf = nil
 local othern = nil
 local targ = nil
 local focus = nil
@@ -143,6 +144,7 @@ end)
 
 ToggleFOFF.MouseButton1Click:Connect(function()
 focus = nil
+otherf = nil
 end)
 
 ToggleZ.Name = "Toggle"
@@ -246,19 +248,17 @@ args = {
     [5] = false
 }
 end
-if realPlayer and realPlayer.Parent and realOther and realOther.Parent and focused and focused.Parent and focus ~= nil then
+if focused and focused.Parent and focus ~= nil then
 local alive = players:GetChildren()
 for _, other in ipairs(alive) do
 if other.Name == focus or other.DisplayName == focus then
-othern = other.Name
+otherf = other
+othern = otherf.Name
 args = {
     [1] = 0.5,
     [2] = otherc,
     [3] = {
-        [othern] = otherp,
-        [othern] = otherp,
-        [othern] = otherp,
-        [othern] = otherp,
+        [othern] = otherp
     },
     [4] = {
         [1] = 795.5,
@@ -269,8 +269,6 @@ args = {
 break
 end
 end
-else
-othern = nil
 end
 end
 
@@ -288,7 +286,7 @@ local playerTorso = ply.HumanoidRootPart
 local opponentTorso = opponent.HumanoidRootPart
 local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
 local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
-local requiredDistance = 25 + (ballVelocity / 2 - distanceToBall / 4)
+local requiredDistance = 30 + (ballVelocity / 2 - distanceToBall / 3.5)
 local spamDistance = 30 + (ballVelocity / 10)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 9)
