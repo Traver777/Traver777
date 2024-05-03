@@ -190,15 +190,6 @@ local requiredDistance = 20 + (ballVelocity / 2 - ballVelocity / 10)
 local spamDistance = 25 + (ballVelocity / 8.5)
 local spamDistanceLimit = 30 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 8.5)
-if targ ~= playerW then
-tg = true
-end
-if tg == true and distanceToBall <= requiredDistance then
-if targ == playerW then
-parry:FireServer(unpack(args))
-tg = false
-end
-end
 if distanceToBall <= spamDistance and opponentDistance <= safeDistance and not (distanceToBall >= spamDistanceLimit) then
 if targ == playerW then
 spam = true
