@@ -15,37 +15,21 @@ local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.Heartbeat
 local sim2 = run.PreRender
-local camera = workspace.CurrentCamera
-local direcaoDaCamera = camera.CFrame.LookVector
-local posicaoDaCamera = camera.CFrame.Position
-local distancia = 50
-local numeroAleatorio = math.random(58365443543, 58565443542)
-local numeroAleatorioString = tostring(numeroAleatorio)
-local cframeDaBola = CFrame.new(posicaoDaCamera + (direcaoDaCamera * distancia))
-local args = {
-    [1] = 0.5,
-    [2] = cframeDaBola,
-    [3] = {
-        [numeroAleatorioString] = cframeDaBola.Position
-    },
-    [4] = {
-        [1] = 500,
-        [2] = 150
-    },
-    [5] = false
-}
 
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
+local rootpart = nil
 local targ = nil
-local from = nil
 local pre = nil
 local pre2 = nil
 local pre3 = nil
 local pre4 = nil
+local pre5 = nil
+local contador = 0
 local spam = false
 local tg = true
+local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
 
 print("sucesss run")
@@ -143,7 +127,6 @@ for _, ball in ipairs(balls) do
 if ball:GetAttribute("realBall") == true then
 realBall = ball
 targ = realBall:GetAttribute("target")
-from = realBall:GetAttribute("from")
 break
 end
 end
@@ -155,6 +138,7 @@ realPlayer = nil
 for _, ply in ipairs(alive) do
 if ply.Name == playerW then
 realPlayer = ply
+rootpart = ply:FindFirstChild("HumanoidRootPart")
 break
 end
 end
@@ -173,6 +157,23 @@ end
 end
 end
 
+local function argsAct()
+if realPlayer and realPlayer.Parent then
+args = {
+    [1] = 0.5,
+    [2] = rootpart.CFrame + Vector3.new(0, 0, -60),
+    [3] = {
+        ["42634634334"] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
+    },
+    [4] = {
+        [1] = 795.5,
+        [2] = 152.5
+    },
+    [5] = false
+}
+end
+end
+
 newBall()
 newPlay()
 newOther()
@@ -187,10 +188,10 @@ local playerTorso = ply.HumanoidRootPart
 local opponentTorso = opponent.HumanoidRootPart
 local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
 local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
-local requiredDistance = 20 + (ballVelocity / 2 - ballVelocity / 10)
-local spamDistance = 25 + (ballVelocity / 8.5)
-local spamDistanceLimit = 30 + (ballVelocity / 10)
-local safeDistance = 25 + (ballVelocity / 8.5)
+local requiredDistance = 20 + (ballVelocity / 2 - distanceToBall / 4)
+local spamDistance = 30 + (ballVelocity / 10)
+local spamDistanceLimit = 35 + (ballVelocity / 10)
+local safeDistance = 25 + (ballVelocity / 9)
 if targ ~= playerW then
 tg = true
 end
@@ -200,12 +201,18 @@ parry:FireServer(unpack(args))
 tg = false
 end
 end
-if distanceToBall <= spamDistance and opponentDistance <= safeDistance and not (distanceToBall >= spamDistanceLimit) then
+if distanceToBall <= spamDistance and opponentDistance <= safeDistance and (distanceToBall <= spamDistanceLimit) then
 if targ == playerW then
+contador = contador + 1
+if contador >= 2 then
 spam = true
 end
 else
+contador = 0
+end
+else
 spam = false
+contador = 0
 end
 end
 
@@ -213,6 +220,7 @@ local function newAll()
 newBall()
 newPlay()
 newOther()
+argsAct()
 checkNoMiss()
 end
 
