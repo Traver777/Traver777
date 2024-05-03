@@ -1,4 +1,4 @@
-local players = game.Players
+local players = game:WaitForChild("Players")
 local playerF = players.LocalPlayer
 local playerW = playerF.Name
 
