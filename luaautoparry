@@ -14,7 +14,7 @@ local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.Heartbeat
-local sim2 = run.RenderStepped
+local sim2 = run.PreRender
 local camera = workspace.CurrentCamera
 local direcaoDaCamera = camera.CFrame.LookVector
 local posicaoDaCamera = camera.CFrame.Position
@@ -26,12 +26,11 @@ local args = {
     [1] = 0.5,
     [2] = cframeDaBola,
     [3] = {
-        [numeroAleatorioString .. "a"] = cframeDaBola.Position,
-        [numeroAleatorioString .. "b"] = cframeDaBola.Position
+        [numeroAleatorioString] = cframeDaBola.Position
     },
     [4] = {
-        [1] = 749,
-        [2] = 179.5
+        [1] = 500,
+        [2] = 150
     },
     [5] = false
 }
@@ -242,11 +241,17 @@ if spam == true and realBall and realBall.Parent and realOther and realOther.Par
 parry:FireServer(unpack(args))
 end
 end)
+pre5 = sim2:Connect(function()
+if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
+end
+end)
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
 pre3:Disconnect()
 pre4:Disconnect()
+pre5:Disconnect()
 end)
 
 Frame.Active = true
