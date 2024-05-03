@@ -191,7 +191,7 @@ local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitu
 local requiredDistance = 20 + (ballVelocity / 2 - distanceToBall / 4)
 local spamDistance = 30 + (ballVelocity / 10)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
-local safeDistance = 25 + (ballVelocity / 9)
+local safeDistance = 25 + (ballVelocity / 8)
 if targ ~= playerW then
 tg = true
 end
