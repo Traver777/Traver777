@@ -221,7 +221,7 @@ local function fireIfParentExists()
 end
 
 local function firePrincipal()
-  if spam and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
+  if spam == true and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
     parry:FireServer(unpack(args))
   end
 end
