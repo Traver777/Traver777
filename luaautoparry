@@ -26,6 +26,7 @@ local pre2 = nil
 local pre3 = nil
 local pre4 = nil
 local pre5 = nil
+local pre6 = nil
 local contador = 0
 local spam = false
 local tg = true
@@ -209,6 +210,13 @@ argsAct()
 checkNoMiss()
 end
 
+local function newAll2()
+newBall()
+newPlay()
+newOther()
+checkNoMiss()
+end
+
 local function fireIfParentExists()
   if realPlayer and realPlayer.Parent then
     parry:FireServer(unpack(args))
@@ -233,14 +241,16 @@ end
 
 local function toggleZ()
   pre3 = sim:Connect(newAll)
-  pre4 = sim2:Connect(firePrincipal)
+  pre4 = sim:Connect(newAll2)
   pre5 = sim2:Connect(firePrincipal)
+  pre6 = sim2:Connect(firePrincipal)
 end
 
 local function toggleZOFF()
   if pre3 then pre3:Disconnect() end
   if pre4 then pre4:Disconnect() end
   if pre5 then pre5:Disconnect() end
+  if pre6 then pre6:Disconnect() end
 end
 
 Toggle.MouseButton1Click:Connect(toggleOn)
