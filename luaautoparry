@@ -1,4 +1,4 @@
-local players = game:WaitForChild("Players")
+local players = game.Players
 local playerF = players.LocalPlayer
 local playerW = playerF.Name
 
@@ -22,15 +22,12 @@ local sim2 = run.PreRender
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
-local rootpart = nil
-local otherf = nil
 local othern = nil
 local targ = nil
 local focus = nil
 local focused = nil
+local rootpart = nil
 local rootparto = nil
-local otherc = nil
-local otherp = nil
 local pre = nil
 local pre2 = nil
 local pre3 = nil
@@ -214,62 +211,59 @@ for _, other in pairs(alive) do
 if other.Name ~= playerW then
 table.insert(others,other)
 realOther = other
-end
 break
 end
 end
+end
 
-local function newOtherFocus()
+local function foc()
 local alive = aliveFolder:GetChildren()
+for _, player in ipairs(game.Players:GetPlayers()) do
+if player.Name == focus or player.DisplayName == focus then
+othern = player.Name
+end
 for _, other in ipairs(alive) do
 if other.Name == othern then
 focused = other
 rootparto = focused:FindFirstChild("HumanoidRootPart")
-otherc = rootparto.CFrame
-otherp = otherc.Position
 break
 end
+end
+break
 end
 end
 
 local function argsAct()
-if realPlayer and realPlayer.Parent and focus == nil then
-args = {
-    [1] = 0.5,
-    [2] = rootpart.CFrame + Vector3.new(0, 0, -60),
-    [3] = {
-        ["42634634334"] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
-    },
-    [4] = {
-        [1] = 795.5,
-        [2] = 152.5
-    },
-    [5] = false
-}
-end
+if realPlayer and realPlayer.Parent and focus == nil or focused and not focused.Parent then
+        args = {
+            [1] = 0.5,
+            [2] = rootpart.CFrame + Vector3.new(0, 0, -60),
+            [3] = {
+                ["42423424423"] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
+            },
+            [4] = {
+                [1] = 795.5,
+                [2] = 152.5
+            },
+            [5] = false
+        }
+    end
 if focused and focused.Parent and focus ~= nil then
-local alive = players:GetChildren()
-for _, other in ipairs(alive) do
-if other.Name == focus or other.DisplayName == focus then
-otherf = other
-othern = otherf.Name
-args = {
-    [1] = 0.5,
-    [2] = otherc,
-    [3] = {
-        [othern] = otherp
-    },
-    [4] = {
-        [1] = 795.5,
-        [2] = 152.5
-    },
-    [5] = false
-}
-break
+        args = {
+            [1] = 0.5,
+            [2] = rootparto.CFrame,
+            [3] = {
+                [othern] = rootparto.CFrame.Position
+            },
+            [4] = {
+                [1] = 795.5,
+                [2] = 152.5
+            },
+            [5] = false
+        }
 end
 end
-end
-end
+
 
 newBall()
 newPlay()
@@ -321,11 +315,6 @@ newOther()
 checkNoMiss()
 end
 
-local function newFocus()
-newOtherFocus()
-argsAct()
-end
-
 Toggle.MouseButton1Click:Connect(function()
 pre = sim2:Connect(function()
 if realPlayer and realPlayer.Parent then
@@ -344,9 +333,14 @@ pre:Disconnect()
 pre2:Disconnect()
 end)
 
+local function atc()
+foc()
+argsAct()
+end
+
 ToggleZ.MouseButton1Click:Connect(function()
 pre3 = sim:Connect(newAll)
-pre4 = sim2:Connect(newFocus)
+pre4 = sim2:Connect(atc)
 pre5 = sim2:Connect(function()
 if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
