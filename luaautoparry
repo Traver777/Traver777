@@ -15,7 +15,7 @@ local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.Heartbeat
-local sim2 = run.PreRender
+local sim2 = run.RenderStepped
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -162,11 +162,6 @@ newBall()
 newPlay()
 newOther()
 
-local function calcularValorDaBola(posicaoBola, direcaoBola, posicaoJogador)
-local direcao = (posicaoJogador - posicaoBola).unit
-local produtoEscalar = direcao:Dot(direcaoBola)
-return produtoEscalar
-end
 local function checkNoMiss()
 if not (realBall and realPlayer and realOther) then return end
 local ballVelocity = realBall.Velocity.Magnitude
@@ -174,10 +169,8 @@ local playerTorso = realPlayer.HumanoidRootPart.Position
 local opponentTorso = realOther.HumanoidRootPart.Position
 local distanceToBall = (playerTorso - realBall.Position).Magnitude
 local opponentDistance = (playerTorso - opponentTorso).Magnitude
-local bolaDir = realBall.Velocity.Unit
-local velocityTowardsPlayer = calcularValorDaBola(realBall.Position, bolaDir, playerTorso)
-local adjustedDistance = 20 + ballVelocity / 2.1
-local requiredDistance = distanceToBall <= adjustedDistance and velocityTowardsPlayer > 0
+local adjustedDistance = 20 + (ballVelocity / 2 - distanceToBall / 4)
+local requiredDistance = distanceToBall <= adjustedDistance
 local spamDistance = 30 + ballVelocity / 9
 local safeDistance = 25 + ballVelocity / 7.5
 if targ ~= playerW then
