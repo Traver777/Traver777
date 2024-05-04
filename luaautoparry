@@ -117,59 +117,46 @@ ToggleZOFF.MouseButton1Click:Connect(function()
 end)
 
 local function newBall()
-local balls = ballsFolder:GetChildren()
-realBall = nil
-for _, ball in ipairs(balls) do
-if ball:GetAttribute("realBall") == true then
-realBall = ball
-targ = realBall:GetAttribute("target")
-break
-end
-end
+  for _, ball in ipairs(ballsFolder:GetChildren()) do
+    if ball:GetAttribute("realBall") then
+      realBall = ball
+      targ = ball:GetAttribute("target")
+      break
+    end
+  end
 end
 
 local function newPlay()
-local alive = aliveFolder:GetChildren()
-realPlayer = nil
-for _, ply in ipairs(alive) do
-if ply.Name == playerW then
-realPlayer = ply
-rootpart = ply:FindFirstChild("HumanoidRootPart")
-break
-end
-end
+  for _, ply in ipairs(aliveFolder:GetChildren()) do
+    if ply.Name == playerW then
+      realPlayer = ply
+      rootpart = ply:FindFirstChild("HumanoidRootPart")
+      break
+    end
+  end
 end
 
 local function newOther()
-local alive = aliveFolder:GetChildren()
-realOther = nil
-local others = {}
-for _, other in pairs(alive) do
-if other.Name ~= playerW then
-table.insert(others,other)
-realOther = other
-break
-end
-end
+  for _, other in ipairs(aliveFolder:GetChildren()) do
+    if other.Name ~= playerW then
+      realOther = other
+      break
+    end
+  end
 end
 
 local function argsAct()
-if realPlayer and realPlayer.Parent then
-        args = {
-            [1] = 0.5,
-            [2] = rootpart.CFrame * CFrame.new(0, 0, -60),
-            [3] = {
-                ["42423424423"] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
-            },
-            [4] = {
-                [1] = 795.5,
-                [2] = 152.5
-            },
-            [5] = false
-        }
+  if realPlayer and realPlayer.Parent then
+    local rootPos = rootpart.CFrame.Position
+    args = {
+      0.5,
+      rootpart.CFrame * CFrame.new(0, 0, -60),
+      { ["42423424423"] = rootPos + Vector3.new(0, 0, -60) },
+      { 795.5, 152.5 },
+      false
+    }
+  end
 end
-end
-
 
 newBall()
 newPlay()
@@ -181,45 +168,38 @@ local function calcularValorDaBola(posicaoBola, direcaoBola, posicaoJogador)
 end
 
 local function checkNoMiss()
-  if not realBall or not realPlayer or not realOther then return end
-  local ball = realBall
-  local ply = realPlayer
-  local opponent = realOther
-  local ballVelocity = ball.Velocity.Magnitude
-  local playerTorso = ply.HumanoidRootPart
-  local opponentTorso = opponent.HumanoidRootPart
-  local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
-  local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
-  local requiredDistance = 20 + (ballVelocity / 2 - distanceToBall / 4)
-  local bolaDir = ball.Velocity.Unit
-  local velocityTowardsPlayer = calcularValorDaBola(ball.Position, bolaDir, playerTorso.Position)
-  local spamDistance = 30 + (ballVelocity / 10)
-  local spamDistanceLimit = 35 + (ballVelocity / 10)
-  local safeDistance = 25 + (ballVelocity / 9)
-  local ballReq = 20 + (ballVelocity / 10)
-if targ ~= playerW then
-tg = true
+  if not (realBall and realPlayer and realOther) then return end
+  local ballVelocity = realBall.Velocity.Magnitude
+  local playerTorso = realPlayer.HumanoidRootPart.Position
+  local opponentTorso = realOther.HumanoidRootPart.Position
+  local distanceToBall = (playerTorso - realBall.Position).Magnitude
+  local opponentDistance = (playerTorso - opponentTorso).Magnitude
+  local requiredDistance = 20 + ballVelocity / 2 - distanceToBall / 4
+  local bolaDir = realBall.Velocity.Unit
+  local velocityTowardsPlayer = calcularValorDaBola(realBall.Position, bolaDir, playerTorso)
+  local spamDistance = 30 + ballVelocity / 10
+  local safeDistance = 25 + ballVelocity / 9
+  local ballReq = 20 + ballVelocity / 10
+  if targ ~= playerW then tg = true end
+  if tg and ((distanceToBall <= requiredDistance and ballVelocity > 30) or (distanceToBall <= ballReq and distanceToBall <= 30)) then
+    if targ == playerW and velocityTowardsPlayer > 0 then
+      parry:FireServer(unpack(args))
+      tg = false
+    end
+  end
+  if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
+    if targ == playerW then
+      contador = contador + 1
+      if contador >= 2 then spam = true end
+    else
+      contador = 0
+    end
+  else
+    spam = false
+    contador = 0
+  end
 end
-if tg == true and distanceToBall <= requiredDistance and ballVelocity > 30 or tg == true and distanceToBall <= ballReq and distanceToBall <= 30 then
-if targ == playerW and velocityTowardsPlayer > 0 then
-parry:FireServer(unpack(args))
-tg = false
-end
-end
-if distanceToBall <= spamDistance and opponentDistance <= safeDistance and (distanceToBall <= spamDistanceLimit) then
-if targ == playerW then
-contador = contador + 1
-if contador >= 2 then
-spam = true
-end
-else
-contador = 0
-end
-else
-spam = false
-contador = 0
-end
-end
+
 
 local function newAll()
 newBall()
@@ -229,43 +209,45 @@ argsAct()
 checkNoMiss()
 end
 
-Toggle.MouseButton1Click:Connect(function()
-pre = sim2:Connect(function()
-if realPlayer and realPlayer.Parent then
-parry:FireServer(unpack(args))
+local function fireIfParentExists()
+  if realPlayer and realPlayer.Parent then
+    parry:FireServer(unpack(args))
+  end
 end
-end)
-pre2 = sim2:Connect(function()
-if realPlayer and realPlayer.Parent then
-parry:FireServer(unpack(args))
-end
-end)
-end)
 
-ToggleOFF.MouseButton1Click:Connect(function()
-pre:Disconnect()
-pre2:Disconnect()
-end)
-
-ToggleZ.MouseButton1Click:Connect(function()
-pre3 = sim:Connect(newAll)
-pre4 = sim2:Connect(function()
-if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
-parry:FireServer(unpack(args))
+local function firePrincipal()
+  if spam == true and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
+  parry:FireServer(unpack(args))
+  end
 end
-end)
-pre5 = sim2:Connect(function()
-if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
-parry:FireServer(unpack(args))
-end
-end)
-end)
 
-ToggleZOFF.MouseButton1Click:Connect(function()
-pre3:Disconnect()
-pre4:Disconnect()
-pre5:Disconnect()
-end)
+local function toggleOn()
+  pre = sim2:Connect(fireIfParentExists)
+  pre2 = sim2:Connect(fireIfParentExists)
+end
+
+local function toggleOff()
+  if pre then pre:Disconnect() end
+  if pre2 then pre2:Disconnect() end
+end
+
+local function toggleZ()
+  pre3 = sim:Connect(newAll)
+  pre4 = sim2:Connect(firePrincipal)
+  pre5 = sim2:Connect(firePrincipal)
+end
+
+local function toggleZOFF()
+  if pre3 then pre3:Disconnect() end
+  if pre4 then pre4:Disconnect() end
+  if pre5 then pre5:Disconnect() end
+end
+
+Toggle.MouseButton1Click:Connect(toggleOn)
+ToggleOFF.MouseButton1Click:Connect(toggleOff)
+ToggleZ.MouseButton1Click:Connect(toggleZ)
+ToggleZOFF.MouseButton1Click:Connect(toggleZOFF)
+
 
 Frame.Active = true
 Frame.Draggable = true
