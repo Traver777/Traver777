@@ -199,7 +199,6 @@ local function checkNoMiss()
   end
 end
 
-
 local function newAll()
 newBall()
 newPlay()
