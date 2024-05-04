@@ -19,8 +19,6 @@ local sim2 = run.PreRender
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
-local number = math.random(04644334333,63443644334)
-local name = tostring(number)
 local targ = nil
 local rootpart = nil
 local pre = nil
@@ -161,7 +159,7 @@ if realPlayer and realPlayer.Parent then
             [1] = 0.5,
             [2] = rootpart.CFrame * CFrame.new(0, 0, -60),
             [3] = {
-                [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
+                ["42423424423"] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
             },
             [4] = {
                 [1] = 795.5,
@@ -169,7 +167,6 @@ if realPlayer and realPlayer.Parent then
             },
             [5] = false
         }
-
 end
 end
 
@@ -177,27 +174,34 @@ end
 newBall()
 newPlay()
 newOther()
+local function calcularValorDaBola(posicaoBola, direcaoBola, posicaoJogador)
+  local direcao = (posicaoJogador - posicaoBola).unit
+  local produtoEscalar = direcao:Dot(direcaoBola)
+  return produtoEscalar
+end
 
 local function checkNoMiss()
-if not realBall or not realPlayer or not realOther then return end
-local ball = realBall
-local ply = realPlayer
-local opponent = realOther
-local ballVelocity = ball.Velocity.Magnitude
-local playerTorso = ply.HumanoidRootPart
-local opponentTorso = opponent.HumanoidRootPart
-local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
-local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
-local requiredDistance = 20 + (ballVelocity / 2 - distanceToBall / 4)
-local spamDistance = 30 + (ballVelocity / 10)
-local spamDistanceLimit = 35 + (ballVelocity / 10)
-local safeDistance = 25 + (ballVelocity / 9)
-local ballReq = 20 + (ballVelocity / 10)
+  if not realBall or not realPlayer or not realOther then return end
+  local ball = realBall
+  local ply = realPlayer
+  local opponent = realOther
+  local ballVelocity = ball.Velocity.Magnitude
+  local playerTorso = ply.HumanoidRootPart
+  local opponentTorso = opponent.HumanoidRootPart
+  local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
+  local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
+  local requiredDistance = 20 + (ballVelocity / 2 - distanceToBall / 4)
+  local bolaDir = ball.Velocity.Unit
+  local velocityTowardsPlayer = calcularValorDaBola(ball.Position, bolaDir, playerTorso.Position)
+  local spamDistance = 30 + (ballVelocity / 10)
+  local spamDistanceLimit = 35 + (ballVelocity / 10)
+  local safeDistance = 25 + (ballVelocity / 9)
+  local ballReq = 20 + (ballVelocity / 10)
 if targ ~= playerW then
 tg = true
 end
 if tg == true and distanceToBall <= requiredDistance and ballVelocity > 30 or tg == true and distanceToBall <= ballReq and distanceToBall <= 30 then
-if targ == playerW then
+if targ == playerW and velocityTowardsPlayer > 0 then
 parry:FireServer(unpack(args))
 tg = false
 end
@@ -242,8 +246,6 @@ ToggleOFF.MouseButton1Click:Connect(function()
 pre:Disconnect()
 pre2:Disconnect()
 end)
-
-
 
 ToggleZ.MouseButton1Click:Connect(function()
 pre3 = sim:Connect(newAll)
