@@ -28,6 +28,7 @@ local pre4 = nil
 local contador = 0
 local spam = false
 local tg = true
+local sp = true
 local args = {}
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
 
@@ -178,7 +179,7 @@ local velocityTowardsPlayer = calcularValorDaBola(realBall.Position, bolaDir, pl
 local adjustedDistance = 20 + ballVelocity / 2.1
 local requiredDistance = distanceToBall <= adjustedDistance and velocityTowardsPlayer > 0
 local spamDistance = 30 + ballVelocity / 9
-local safeDistance = 25 + ballVelocity / 7
+local safeDistance = 25 + ballVelocity / 7.5
 if targ ~= playerW then tg = true end
 if tg == true and requiredDistance then
 if targ == playerW then
@@ -187,8 +188,12 @@ tg = false
 end
 end
 if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
-if targ == playerW then
+if targ ~= playerW then
+sp = true
+end
+if sp == true and targ == playerW then
 contador = contador + 1
+sp = false
 if contador >= 2 then spam = true end
 else
 contador = 0
