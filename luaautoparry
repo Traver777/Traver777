@@ -180,17 +180,16 @@ local adjustedDistance = 20 + ballVelocity / 2.1
 local requiredDistance = distanceToBall <= adjustedDistance and velocityTowardsPlayer > 0
 local spamDistance = 30 + ballVelocity / 9
 local safeDistance = 25 + ballVelocity / 7.5
-if targ ~= playerW then tg = true end
 if tg == true and requiredDistance then
 if targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
 end
 end
-if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
 if targ ~= playerW then
 sp = true
 end
+if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
 if sp == true and targ == playerW then
 contador = contador + 1
 sp = false
@@ -213,55 +212,35 @@ checkNoMiss()
 end
 
 local function toggleOn()
-if not pre then
 pre = sim2:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
 end
-end
 
 local function toggleOff()
-if pre then
 pre:Disconnect()
-pre = nil
-end
 end
 
 local function toggleZ()
-if not pre2 then
 pre2 = sim:Connect(newAll)
+pre3 = sim2:Connect(function()
+if spam == true and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
+parry:FireServer(unpack(args))
 end
-if not pre3 then
+end)
 pre4 = sim2:Connect(function()
 if spam == true and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
 parry:FireServer(unpack(args))
 end
 end)
-end
-if not pre4 then
-pre4 = sim2:Connect(function()
-if spam == true and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
-parry:FireServer(unpack(args))
-end
-end)
-end
 end
 
 local function toggleZOFF()
-if pre2 then
 pre2:Disconnect()
-pre2 = nil
-end
-if pre3 then
 pre3:Disconnect()
-pre3 = nil
-end
-if pre4 then
 pre4:Disconnect()
-pre4 = nil
-end
 end
 
 Toggle.MouseButton1Click:Connect(toggleOn)
