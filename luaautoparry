@@ -174,20 +174,21 @@ local function checkNoMiss()
   local opponentTorso = realOther.HumanoidRootPart.Position
   local distanceToBall = (playerTorso - realBall.Position).Magnitude
   local opponentDistance = (playerTorso - opponentTorso).Magnitude
-  local requiredDistance = 20 + ballVelocity / 2.1
   local bolaDir = realBall.Velocity.Unit
   local velocityTowardsPlayer = calcularValorDaBola(realBall.Position, bolaDir, playerTorso)
+  local requiredDistance = distanceToBall <= 20 + ballVelocity / 2.1
+  and velocityTowardsPlayer > 0
   local spamDistance = 30 + ballVelocity / 10
   local safeDistance = 25 + ballVelocity / 8
   if targ ~= playerW then tg = true end
-  if tg and distanceToBall <= requiredDistance then
-    if targ == playerW and velocityTowardsPlayer > 0 then
+  if tg == true and requiredDistance then
+    if targ == playerW then
       parry:FireServer(unpack(args))
       tg = false
     end
   end
   if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
-    if targ == playerW then
+    if tg == true and targ == playerW then
       contador = contador + 1
       if contador >= 2 then spam = true end
     else
