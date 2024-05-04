@@ -246,6 +246,5 @@ ToggleOFF.MouseButton1Click:Connect(toggleOff)
 ToggleZ.MouseButton1Click:Connect(toggleZ)
 ToggleZOFF.MouseButton1Click:Connect(toggleZOFF)
 
-
 Frame.Active = true
 Frame.Draggable = true
