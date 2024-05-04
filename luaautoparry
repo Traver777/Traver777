@@ -221,6 +221,8 @@ local alive = aliveFolder:GetChildren()
 for _, player in ipairs(game.Players:GetPlayers()) do
 if player.Name == focus or player.DisplayName == focus then
 othern = player.Name
+break
+end
 end
 for _, other in ipairs(alive) do
 if other.Name == othern then
@@ -228,8 +230,6 @@ focused = other
 rootparto = focused:FindFirstChild("HumanoidRootPart")
 break
 end
-end
-break
 end
 end
 
