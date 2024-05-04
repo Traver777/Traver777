@@ -16,7 +16,6 @@ local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.Heartbeat
 local sim2 = run.PreRender
-local sim3 = run.RenderStepped
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -250,7 +249,7 @@ if spam == true and realBall and realBall.Parent and realOther and realOther.Par
 parry:FireServer(unpack(args))
 end
 end)
-pre5 = sim3:Connect(function()
+pre5 = sim2:Connect(function()
 if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
