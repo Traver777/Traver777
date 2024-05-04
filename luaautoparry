@@ -180,6 +180,9 @@ local adjustedDistance = 20 + ballVelocity / 2.1
 local requiredDistance = distanceToBall <= adjustedDistance and velocityTowardsPlayer > 0
 local spamDistance = 30 + ballVelocity / 9
 local safeDistance = 25 + ballVelocity / 7.5
+if targ ~= playerW then
+tg = true
+end
 if requiredDistance and tg == true then
 if targ == playerW then
 parry:FireServer(unpack(args))
