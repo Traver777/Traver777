@@ -180,7 +180,7 @@ local adjustedDistance = 20 + ballVelocity / 2.1
 local requiredDistance = distanceToBall <= adjustedDistance and velocityTowardsPlayer > 0
 local spamDistance = 30 + ballVelocity / 9
 local safeDistance = 25 + ballVelocity / 7.5
-if tg == true and requiredDistance then
+if requiredDistance and tg == true then
 if targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
@@ -191,16 +191,16 @@ sp = true
 end
 if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
 if sp == true and targ == playerW then
+if contador < 2 then
 contador = contador + 1
 sp = false
-if contador >= 2 then spam = true end
-else
-contador = 0
+end
 end
 else
 spam = false
 contador = 0
 end
+if contador >= 2 then spam = true end
 end
 
 local function newAll()
