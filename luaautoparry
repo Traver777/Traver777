@@ -9,25 +9,19 @@ local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local Toggle = Instance.new("TextButton")
 local ToggleOFF = Instance.new("TextButton")
-local ToggleF = Instance.new("TextButton")
-local ToggleFOFF = Instance.new("TextButton")
 local ToggleZ = Instance.new("TextButton")
 local ToggleZOFF = Instance.new("TextButton")
-local TextBox = Instance.new("TextBox")
 local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.Heartbeat
 local sim2 = run.PreRender
+local sim3 = run.RenderStepped
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
-local othern = nil
 local targ = nil
-local focus = nil
-local focused = nil
 local rootpart = nil
-local rootparto = nil
 local pre = nil
 local pre2 = nil
 local pre3 = nil
@@ -36,7 +30,7 @@ local pre5 = nil
 local contador = 0
 local spam = false
 local tg = true
-local args
+local args = {}
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
 
 print("sucesss run")
@@ -49,14 +43,14 @@ Frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
 Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.2012012, 0, 0.343128483, 0)
-Frame.Size = UDim2.new(0, 215, 0, 85)
+Frame.Size = UDim2.new(0, 115, 0, 85)
 
 Toggle.Name = "Toggle"
 Toggle.Parent = Frame
 Toggle.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
 Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Toggle.BorderSizePixel = 0
-Toggle.Position = UDim2.new(0.02012012, 0, 0.5103128483, 0)
+Toggle.Position = UDim2.new(0.067012012, 0, 0.5103128483, 0)
 Toggle.Size = UDim2.new(0, 100, 0, 35)
 Toggle.Visible = true
 Toggle.Font = Enum.Font.Bodoni
@@ -74,7 +68,7 @@ ToggleOFF.Parent = Frame
 ToggleOFF.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
 ToggleOFF.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ToggleOFF.BorderSizePixel = 0
-ToggleOFF.Position = UDim2.new(0.02012012, 0, 0.5103128483, 0)
+ToggleOFF.Position = UDim2.new(0.067012012, 0, 0.5103128483, 0)
 ToggleOFF.Size = UDim2.new(0, 100, 0, 35)
 ToggleOFF.Visible = false
 ToggleOFF.Font = Enum.Font.Bodoni
@@ -87,68 +81,12 @@ ToggleOFF.MouseButton1Click:Connect(function()
     Toggle.Visible = true
 end)
 
-ToggleF.Name = "Toggle"
-ToggleF.Parent = Frame
-ToggleF.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
-ToggleF.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ToggleF.BorderSizePixel = 0
-ToggleF.Position = UDim2.new(0.510012012, 0, 0.5103128483, 0)
-ToggleF.Size = UDim2.new(0, 100, 0, 35)
-ToggleF.Visible = true
-ToggleF.Font = Enum.Font.Bodoni
-ToggleF.Text = "active"
-ToggleF.TextColor3 = Color3.fromRGB(0, 0, 0)
-ToggleF.TextSize = 33.000
-ToggleF.TextWrapped = true
-ToggleF.MouseButton1Click:Connect(function()
-    ToggleF.Visible = false
-    ToggleFOFF.Visible = true
-end)
-
-ToggleFOFF.Name = "ToggleOFF"
-ToggleFOFF.Parent = Frame
-ToggleFOFF.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
-ToggleFOFF.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ToggleFOFF.BorderSizePixel = 0
-ToggleFOFF.Position = UDim2.new(0.510012012, 0, 0.5103128483, 0)
-ToggleFOFF.Size = UDim2.new(0, 100, 0, 35)
-ToggleFOFF.Visible = false
-ToggleFOFF.Font = Enum.Font.Bodoni
-ToggleFOFF.Text = "disable"
-ToggleFOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
-ToggleFOFF.TextSize = 33.000
-ToggleFOFF.TextWrapped = true
-ToggleFOFF.MouseButton1Click:Connect(function()
-    ToggleFOFF.Visible = false
-    ToggleF.Visible = true
-end)
-
-TextBox.Parent = Frame
-TextBox.PlaceholderText = "player focus"
-TextBox.Size = UDim2.new(0, 100, 0, 35)
-TextBox.Position = UDim2.new(0.510012012, 0, 0.053128483, 0)
-TextBox.Text = ""
-TextBox.Visible = true
-TextBox.Font = Enum.Font.SourceSans
-TextBox.TextSize = 24
-TextBox.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
-TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
-TextBox.BorderSizePixel = 1
-
-ToggleF.MouseButton1Click:Connect(function()
-focus = TextBox.Text
-end)
-
-ToggleFOFF.MouseButton1Click:Connect(function()
-focus = nil
-end)
-
 ToggleZ.Name = "Toggle"
 ToggleZ.Parent = Frame
 ToggleZ.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
 ToggleZ.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZ.BorderSizePixel = 0
-ToggleZ.Position = UDim2.new(0.02012012, 0, 0.053128483, 0)
+ToggleZ.Position = UDim2.new(0.067012012, 0, 0.053128483, 0)
 ToggleZ.Size = UDim2.new(0, 100, 0, 35)
 ToggleZ.Visible = true
 ToggleZ.Font = Enum.Font.Bodoni
@@ -166,7 +104,7 @@ ToggleZOFF.Parent = Frame
 ToggleZOFF.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
 ToggleZOFF.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZOFF.BorderSizePixel = 0
-ToggleZOFF.Position = UDim2.new(0.02012012, 0, 0.053128483, 0)
+ToggleZOFF.Position = UDim2.new(0.067012012, 0, 0.053128483, 0)
 ToggleZOFF.Size = UDim2.new(0, 100, 0, 35)
 ToggleZOFF.Visible = false
 ToggleZOFF.Font = Enum.Font.Bodoni
@@ -216,45 +154,13 @@ end
 end
 end
 
-local function foc()
-local alive = aliveFolder:GetChildren()
-local plys = players:GetChildren()
-for _, player in ipairs(plys) do
-if player.Name == focus or player.DisplayName == focus then
-othern = player.Name
-break
-end
-end
-for _, other in ipairs(alive) do
-if other.Name == othern then
-focused = other
-rootparto = focused:FindFirstChild("HumanoidRootPart")
-break
-end
-end
-end
-
 local function argsAct()
-if realPlayer and realPlayer.Parent and focus == nil or focused and not focused.Parent then
+if realPlayer and realPlayer.Parent then
         args = {
             [1] = 0.5,
-            [2] = rootpart.CFrame + Vector3.new(0, 0, -60),
+            [2] = rootpart.CFrame * CFrame.new(0, 0, -60),
             [3] = {
                 ["42423424423"] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
-            },
-            [4] = {
-                [1] = 795.5,
-                [2] = 152.5
-            },
-            [5] = false
-        }
-    end
-if focused and focused.Parent and focus ~= nil then
-        args = {
-            [1] = 0.5,
-            [2] = rootparto.CFrame,
-            [3] = {
-                ["52434335324"] = rootparto.CFrame.Position
             },
             [4] = {
                 [1] = 795.5,
@@ -313,6 +219,7 @@ local function newAll()
 newBall()
 newPlay()
 newOther()
+argsAct()
 checkNoMiss()
 end
 
@@ -334,15 +241,16 @@ pre:Disconnect()
 pre2:Disconnect()
 end)
 
-local function atc()
-foc()
-argsAct()
-end
+
 
 ToggleZ.MouseButton1Click:Connect(function()
 pre3 = sim:Connect(newAll)
-pre4 = sim2:Connect(atc)
-pre5 = sim2:Connect(function()
+pre4 = sim2:Connect(function()
+if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
+end
+end)
+pre5 = sim3:Connect(function()
 if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
