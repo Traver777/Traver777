@@ -25,7 +25,6 @@ local pre = nil
 local pre2 = nil
 local pre3 = nil
 local pre4 = nil
-local pre5 = nil
 local contador = 0
 local spam = false
 local tg = true
@@ -161,12 +160,12 @@ end
 newBall()
 newPlay()
 newOther()
+
 local function calcularValorDaBola(posicaoBola, direcaoBola, posicaoJogador)
   local direcao = (posicaoJogador - posicaoBola).unit
   local produtoEscalar = direcao:Dot(direcaoBola)
   return produtoEscalar
 end
-
 local function checkNoMiss()
   if not (realBall and realPlayer and realOther) then return end
   local ballVelocity = realBall.Velocity.Magnitude
@@ -176,8 +175,8 @@ local function checkNoMiss()
   local opponentDistance = (playerTorso - opponentTorso).Magnitude
   local bolaDir = realBall.Velocity.Unit
   local velocityTowardsPlayer = calcularValorDaBola(realBall.Position, bolaDir, playerTorso)
-  local requiredDistance = distanceToBall <= 20 + ballVelocity / 2.1
-  and velocityTowardsPlayer > 0
+  local adjustedDistance = 20 + (ballVelocity ^ 1.1) / 2.1
+  local requiredDistance = distanceToBall <= adjustedDistance and velocityTowardsPlayer > 0
   local spamDistance = 30 + ballVelocity / 10
   local safeDistance = 25 + ballVelocity / 8
   if targ ~= playerW then tg = true end
@@ -208,6 +207,14 @@ argsAct()
 checkNoMiss()
 end
 
+local function newAl()
+newBall()
+newPlay()
+newOther()
+argsAct()
+checkNoMiss()
+end
+
 local function fireIfParentExists()
   if realPlayer and realPlayer.Parent then
     parry:FireServer(unpack(args))
@@ -215,31 +222,49 @@ local function fireIfParentExists()
 end
 
 local function firePrincipal()
-  if spam == true and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
-  parry:FireServer(unpack(args))
+  if spam and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
+    parry:FireServer(unpack(args))
   end
 end
 
 local function toggleOn()
-  pre = sim2:Connect(fireIfParentExists)
-  pre2 = sim2:Connect(fireIfParentExists)
+  if not pre then
+    pre = sim2:Connect(fireIfParentExists)
+  end
 end
 
 local function toggleOff()
-  if pre then pre:Disconnect() end
-  if pre2 then pre2:Disconnect() end
+  if pre then
+    pre:Disconnect()
+    pre = nil
+  end
 end
 
 local function toggleZ()
-  pre3 = sim:Connect(newAll)
-  pre4 = sim2:Connect(firePrincipal)
-  pre5 = sim2:Connect(firePrincipal)
+  if not pre2 then
+    pre2 = sim:Connect(newAll)
+  end
+  if not pre3 then
+    pre3 = sim:Connect(newAl)
+  end
+  if not pre4 then
+    pre4 = sim2:Connect(firePrincipal)
+  end
 end
 
 local function toggleZOFF()
-  if pre3 then pre3:Disconnect() end
-  if pre4 then pre4:Disconnect() end
-  if pre5 then pre5:Disconnect() end
+  if pre2 then
+    pre2:Disconnect()
+    pre2 = nil
+  end
+  if pre3 then
+    pre3:Disconnect()
+    pre3 = nil
+  end
+  if pre4 then
+    pre4:Disconnect()
+    pre4 = nil
+  end
 end
 
 Toggle.MouseButton1Click:Connect(toggleOn)
