@@ -175,7 +175,7 @@ local function checkNoMiss()
   local opponentDistance = (playerTorso - opponentTorso).Magnitude
   local bolaDir = realBall.Velocity.Unit
   local velocityTowardsPlayer = calcularValorDaBola(realBall.Position, bolaDir, playerTorso)
-  local adjustedDistance = 20 + (ballVelocity ^ 1.1) / 2.1
+  local adjustedDistance = 20 + ballVelocity / 2.1
   local requiredDistance = distanceToBall <= adjustedDistance and velocityTowardsPlayer > 0
   local spamDistance = 30 + ballVelocity / 10
   local safeDistance = 25 + ballVelocity / 8
@@ -211,7 +211,6 @@ local function newAl()
 newBall()
 newPlay()
 newOther()
-argsAct()
 checkNoMiss()
 end
 
