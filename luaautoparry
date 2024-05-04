@@ -19,6 +19,8 @@ local sim2 = run.PreRender
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
+local number = math.random(04644334333,63443644334)
+local name = tostring(number)
 local targ = nil
 local rootpart = nil
 local pre = nil
@@ -159,7 +161,7 @@ if realPlayer and realPlayer.Parent then
             [1] = 0.5,
             [2] = rootpart.CFrame * CFrame.new(0, 0, -60),
             [3] = {
-                ["42423424423"] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
+                [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
             },
             [4] = {
                 [1] = 795.5,
@@ -167,6 +169,7 @@ if realPlayer and realPlayer.Parent then
             },
             [5] = false
         }
+
 end
 end
 
