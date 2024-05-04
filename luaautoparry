@@ -1,4 +1,4 @@
-local players = game.Players
+local players = game:WaitForChild("Players")
 local playerF = players.LocalPlayer
 local playerW = playerF.Name
 
@@ -218,7 +218,8 @@ end
 
 local function foc()
 local alive = aliveFolder:GetChildren()
-for _, player in ipairs(game.Players:GetPlayers()) do
+local plys = players:GetChildren()
+for _, player in ipairs(plys) do
 if player.Name == focus or player.DisplayName == focus then
 othern = player.Name
 break
@@ -253,7 +254,7 @@ if focused and focused.Parent and focus ~= nil then
             [1] = 0.5,
             [2] = rootparto.CFrame,
             [3] = {
-                [othern] = rootparto.CFrame.Position
+                ["52434335324"] = rootparto.CFrame.Position
             },
             [4] = {
                 [1] = 795.5,
