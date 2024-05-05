@@ -117,6 +117,7 @@ ToggleZ.Visible = true
 end)
 
 local function newBall()
+realPlayer = nil
 for _, ball in ipairs(ballsFolder:GetChildren()) do
 if ball:GetAttribute("realBall") then
 realBall = ball
@@ -128,6 +129,7 @@ end
 end
 
 local function newPlay()
+realPlayer = nil
 for _, ply in ipairs(aliveFolder:GetChildren()) do
 if ply.Name == playerW then
 realPlayer = ply
@@ -138,6 +140,7 @@ end
 end
 
 local function newOther()
+realOther = nil
 for _, other in ipairs(aliveFolder:GetChildren()) do
 if other.Name ~= playerW then
 realOther = other
