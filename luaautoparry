@@ -15,7 +15,7 @@ local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.Heartbeat
-local sim2 = run.RenderStepped
+local sim2 = run.PreRender
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -28,7 +28,6 @@ local pre4 = nil
 local contador = 0
 local spam = false
 local tg = true
-local sp = true
 local args = {}
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
 
@@ -169,10 +168,10 @@ local playerTorso = realPlayer.HumanoidRootPart.Position
 local opponentTorso = realOther.HumanoidRootPart.Position
 local distanceToBall = (playerTorso - realBall.Position).Magnitude
 local opponentDistance = (playerTorso - opponentTorso).Magnitude
-local adjustedDistance = 20 + (ballVelocity / 2 - distanceToBall / 4)
+local adjustedDistance = 22 + (ballVelocity / 2 - distanceToBall / 4.2)
 local requiredDistance = distanceToBall <= adjustedDistance
 local spamDistance = 30 + ballVelocity / 9
-local safeDistance = 25 + ballVelocity / 7.5
+local safeDistance = 25 + ballVelocity / 8
 if targ ~= playerW then
 tg = true
 end
@@ -182,15 +181,9 @@ parry:FireServer(unpack(args))
 tg = false
 end
 end
-if targ ~= playerW then
-sp = true
-end
 if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
-if sp == true and targ == playerW then
-if contador < 2 then
+if targ == playerW then
 contador = contador + 1
-sp = false
-end
 end
 else
 spam = false
