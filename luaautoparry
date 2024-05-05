@@ -172,10 +172,10 @@ local playerTorso = realPlayer.HumanoidRootPart.Position
 local opponentTorso = realOther.HumanoidRootPart.Position
 local distanceToBall = (playerTorso - realBall.Position).Magnitude
 local opponentDistance = (playerTorso - opponentTorso).Magnitude
-local adjustedDistance = 22 + (ballVelocity / 2 - distanceToBall / 4.2)
-local requiredDistance = distanceToBall <= adjustedDistance
-local spamDistance = 30 + (ballVelocity / 7 - distanceToBall / 5)
-local safeDistance = 25 + (ballVelocity / 6 - distanceToBall / 5)
+local requiredDistance = 20 + (ballVelocity / 2 - distanceToBall / 4)
+local spamDistance = 30 + (ballVelocity / 10)
+local spamDistanceLimit = 35 + (ballVelocity / 10)
+local safeDistance = 25 + (ballVelocity / 9)
 if targ ~= playerW then
 tg = true
 end
@@ -185,19 +185,19 @@ parry:FireServer(unpack(args))
 tg = false
 end
 end
-if targ ~= playerW then
-sp = true
-end
-if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
-if sp == true and targ == playerW and contador < 2 then
+if distanceToBall <= spamDistance and opponentDistance <= safeDistance and (distanceToBall <= spamDistanceLimit) then
+if targ == playerW then
 contador = contador + 1
-sp = false
+if contador >= 2 then
+spam = true
+end
+else
+contador = 0
 end
 else
 spam = false
 contador = 0
 end
-if contador >= 2 then spam = true end
 end
 
 local function newAll()
