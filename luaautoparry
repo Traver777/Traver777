@@ -197,10 +197,10 @@ else
 spam = false
 contador = 0
 end
+if contador >= 2 then spam = true end
 if contador >= 2 then
 contador = 0
 end
-if contador >= 2 then spam = true end
 end
 
 local function newAll()
