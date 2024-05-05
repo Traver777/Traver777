@@ -15,11 +15,12 @@ local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.Heartbeat
-local sim2 = run.PreRender
+local sim2 = run.RenderStepped
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
 local targ = nil
+local from = nil
 local rootpart = nil
 local pre = nil
 local pre2 = nil
@@ -120,6 +121,7 @@ for _, ball in ipairs(ballsFolder:GetChildren()) do
 if ball:GetAttribute("realBall") then
 realBall = ball
 targ = ball:GetAttribute("target")
+from = ball:GetAttribute("from")
 break
 end
 end
@@ -170,8 +172,8 @@ local distanceToBall = (playerTorso - realBall.Position).Magnitude
 local opponentDistance = (playerTorso - opponentTorso).Magnitude
 local adjustedDistance = 22 + (ballVelocity / 2 - distanceToBall / 4.2)
 local requiredDistance = distanceToBall <= adjustedDistance
-local spamDistance = 30 + ballVelocity / 9
-local safeDistance = 25 + ballVelocity / 8
+local spamDistance = 30 + ballVelocity / 10
+local safeDistance = 25 + ballVelocity / 8.5
 if targ ~= playerW then
 tg = true
 end
@@ -182,7 +184,10 @@ tg = false
 end
 end
 if distanceToBall <= spamDistance and opponentDistance <= safeDistance then
-if targ == playerW then
+if targ == playerW and contador < 1 then
+contador = contador + 1
+end
+if from == playerW and contador < 2 then
 contador = contador + 1
 end
 else
