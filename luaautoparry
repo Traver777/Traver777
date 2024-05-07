@@ -31,10 +31,10 @@ local spam = false
 local tg = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
-local name1 = tostring(math.random(3534334,6343332))
-local name2 = tostring(math.random(9656394,6343143))
-local name3 = tostring(math.random(4284933,6262625))
-local name4 = tostring(math.random(4252433,6242544))
+local name1 = tostring(math.random(1534334,6343332))
+local name2 = tostring(math.random(1656394,6343143))
+local name3 = tostring(math.random(1284933,6262625))
+local name4 = tostring(math.random(1252433,6242544))
 
 
 print("sucesss run")
