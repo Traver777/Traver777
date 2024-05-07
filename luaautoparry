@@ -188,7 +188,7 @@ local requiredDistance = 22 + ((ballVelocity / 2.1) - (distanceToBall / 3.8))
 local spamDistance = 30 + (ballVelocity / 10)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 9)
-local ballReq = 20 + (ballVelocity / 2.1)
+local ballReq = 20 + (ballVelocity / 2)
 
 if targ ~= playerW then
 tg = true
