@@ -1,4 +1,4 @@
-local players = game:WaitForChild("Players")
+local players = game.Players
 local playerF = players.LocalPlayer
 local playerW = playerF.Name
 
@@ -25,11 +25,11 @@ local pre = nil
 local pre2 = nil
 local pre3 = nil
 local pre4 = nil
+local pre5 = nil
 local contador = 0
 local spam = false
 local tg = true
-local sp = true
-local args = {}
+local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
 
 print("sucesss run")
@@ -58,8 +58,8 @@ Toggle.TextColor3 = Color3.fromRGB(0, 0, 0)
 Toggle.TextSize = 33.000
 Toggle.TextWrapped = true
 Toggle.MouseButton1Click:Connect(function()
-Toggle.Visible = false
-ToggleOFF.Visible = true
+    Toggle.Visible = false
+    ToggleOFF.Visible = true
 end)
 
 ToggleOFF.Name = "ToggleOFF"
@@ -76,8 +76,8 @@ ToggleOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleOFF.TextSize = 33.000
 ToggleOFF.TextWrapped = true
 ToggleOFF.MouseButton1Click:Connect(function()
-ToggleOFF.Visible = false
-Toggle.Visible = true
+    ToggleOFF.Visible = false
+    Toggle.Visible = true
 end)
 
 ToggleZ.Name = "Toggle"
@@ -94,8 +94,8 @@ ToggleZ.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZ.TextSize = 33.000
 ToggleZ.TextWrapped = true
 ToggleZ.MouseButton1Click:Connect(function()
-ToggleZ.Visible = false
-ToggleZOFF.Visible = true
+    ToggleZ.Visible = false
+    ToggleZOFF.Visible = true
 end)
 
 ToggleZOFF.Name = "ToggleOFF"
@@ -112,24 +112,26 @@ ToggleZOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZOFF.TextSize = 33.000
 ToggleZOFF.TextWrapped = true
 ToggleZOFF.MouseButton1Click:Connect(function()
-ToggleZOFF.Visible = false
-ToggleZ.Visible = true
+    ToggleZOFF.Visible = false
+    ToggleZ.Visible = true
 end)
 
 local function newBall()
+local balls = ballsFolder:GetChildren()
 realBall = nil
-for _, ball in ipairs(ballsFolder:GetChildren()) do
-if ball:GetAttribute("realBall") then
+for _, ball in ipairs(balls) do
+if ball:GetAttribute("realBall") == true then
 realBall = ball
-targ = ball:GetAttribute("target")
+targ = realBall:GetAttribute("target")
 break
 end
 end
 end
 
 local function newPlay()
+local alive = aliveFolder:GetChildren()
 realPlayer = nil
-for _, ply in ipairs(aliveFolder:GetChildren()) do
+for _, ply in ipairs(alive) do
 if ply.Name == playerW then
 realPlayer = ply
 rootpart = ply:FindFirstChild("HumanoidRootPart")
@@ -139,9 +141,12 @@ end
 end
 
 local function newOther()
+local alive = aliveFolder:GetChildren()
 realOther = nil
-for _, other in ipairs(aliveFolder:GetChildren()) do
+local others = {}
+for _, other in pairs(alive) do
 if other.Name ~= playerW then
+table.insert(others,other)
 realOther = other
 break
 end
@@ -150,15 +155,19 @@ end
 
 local function argsAct()
 if realPlayer and realPlayer.Parent then
-local rootPos = rootpart.CFrame.Position
 args = {
-0.5,
-rootpart.CFrame * CFrame.new(0, 0, -60),
-{ ["42423424423"] = rootPos + Vector3.new(0, 0, -60) },
-{ 795.5, 152.5 },
-false
+    [1] = 0.5,
+    [2] = rootpart.CFrame + Vector3.new(0, 0, -60),
+    [3] = {
+        ["42634634334"] = rootpart.CFrame.Position + Vector3.new(0, 0, -60)
+    },
+    [4] = {
+        [1] = 795.5,
+        [2] = 152.5
+    },
+    [5] = false
 }
-  end
+end
 end
 
 newBall()
@@ -166,20 +175,25 @@ newPlay()
 newOther()
 
 local function checkNoMiss()
-if not (realBall and realPlayer and realOther) then return end
-local ballVelocity = realBall.Velocity.Magnitude
-local playerTorso = realPlayer.HumanoidRootPart.Position
-local opponentTorso = realOther.HumanoidRootPart.Position
-local distanceToBall = (playerTorso - realBall.Position).Magnitude
-local opponentDistance = (playerTorso - opponentTorso).Magnitude
-local requiredDistance = 20 + (ballVelocity / 2 - distanceToBall / 4.2)
+if not realBall or not realPlayer or not realOther then return end
+local ball = realBall
+local ply = realPlayer
+local opponent = realOther
+local ballVelocity = ball.Velocity.Magnitude
+local playerTorso = ply.HumanoidRootPart
+local opponentTorso = opponent.HumanoidRootPart
+local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
+local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
+local requiredDistance = 22 + ((ballVelocity / 2.1) - (distanceToBall / 3.8))
 local spamDistance = 30 + (ballVelocity / 10)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 9)
+local ballReq = 20 + (ballVelocity / 2.1)
+
 if targ ~= playerW then
 tg = true
 end
-if requiredDistance and tg == true then
+if tg == true and distanceToBall <= requiredDistance and ballVelocity > 35 or tg == true and distanceToBall <= ballReq and distanceToBall <= 35 then
 if targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
@@ -208,42 +222,43 @@ argsAct()
 checkNoMiss()
 end
 
-local function toggleOn()
+Toggle.MouseButton1Click:Connect(function()
 pre = sim2:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
+pre2 = sim2:Connect(function()
+if realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
 end
+end)
+end)
 
-local function toggleOff()
+ToggleOFF.MouseButton1Click:Connect(function()
 pre:Disconnect()
-end
-
-local function toggleZ()
-pre2 = sim:Connect(newAll)
-pre3 = sim2:Connect(function()
-if spam == true and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
-parry:FireServer(unpack(args))
-end
-end)
-pre4 = sim2:Connect(function()
-if spam == true and realPlayer and realPlayer.Parent and realOther and realOther.Parent then
-parry:FireServer(unpack(args))
-end
-end)
-end
-
-local function toggleZOFF()
 pre2:Disconnect()
+end)
+
+ToggleZ.MouseButton1Click:Connect(function()
+pre3 = sim:Connect(newAll)
+pre4 = sim2:Connect(function()
+if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
+end
+end)
+pre5 = sim2:Connect(function()
+if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
+end
+end)
+end)
+
+ToggleZOFF.MouseButton1Click:Connect(function()
 pre3:Disconnect()
 pre4:Disconnect()
-end
-
-Toggle.MouseButton1Click:Connect(toggleOn)
-ToggleOFF.MouseButton1Click:Connect(toggleOff)
-ToggleZ.MouseButton1Click:Connect(toggleZ)
-ToggleZOFF.MouseButton1Click:Connect(toggleZOFF)
+pre5:Disconnect()
+end)
 
 Frame.Active = true
 Frame.Draggable = true
