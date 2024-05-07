@@ -14,8 +14,8 @@ local ToggleZOFF = Instance.new("TextButton")
 local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
-local sim = run.Heartbeat
-local sim2 = run.RenderStepped
+local sim = run.PostSimulation
+local sim2 = run.PreRender
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -58,8 +58,8 @@ Toggle.TextColor3 = Color3.fromRGB(0, 0, 0)
 Toggle.TextSize = 33.000
 Toggle.TextWrapped = true
 Toggle.MouseButton1Click:Connect(function()
-    Toggle.Visible = false
-    ToggleOFF.Visible = true
+Toggle.Visible = false
+ToggleOFF.Visible = true
 end)
 
 ToggleOFF.Name = "ToggleOFF"
@@ -76,8 +76,8 @@ ToggleOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleOFF.TextSize = 33.000
 ToggleOFF.TextWrapped = true
 ToggleOFF.MouseButton1Click:Connect(function()
-    ToggleOFF.Visible = false
-    Toggle.Visible = true
+ToggleOFF.Visible = false
+Toggle.Visible = true
 end)
 
 ToggleZ.Name = "Toggle"
@@ -184,7 +184,7 @@ local playerTorso = ply.HumanoidRootPart
 local opponentTorso = opponent.HumanoidRootPart
 local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
 local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
-local requiredDistance = 25 + ((ballVelocity / 2.2) - (distanceToBall / 4))
+local requiredDistance = 25 + ((ballVelocity / 2.1) - (distanceToBall / 4))
 local spamDistance = 30 + (ballVelocity / 10)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 9)
