@@ -193,7 +193,7 @@ local ballReq = 20 + (ballVelocity / 2.1)
 if targ ~= playerW then
 tg = true
 end
-if tg == true and distanceToBall <= requiredDistance and ballVelocity > 35 or tg == true and distanceToBall <= ballReq and distanceToBall <= 35 then
+if tg == true and distanceToBall <= requiredDistance and ballVelocity > 35 or tg == true and distanceToBall <= ballReq and ballVelocity <= 35 then
 if targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
