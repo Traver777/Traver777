@@ -162,7 +162,7 @@ local function argsAct()
 if realPlayer and realPlayer.Parent then
 args = {
     [1] = 0.5,
-    [2] = rootpart.CFrame * CFrame.Angles(0, 200, -50),
+    [2] = rootpart.CFrame * CFrame.new(0, 200, -30),
     [3] = {
         [name1] = rootpart.CFrame.Position + Vector3.new(0, 0, -65),
         [name2] = rootpart.CFrame.Position + Vector3.new(0, 0, -66),
