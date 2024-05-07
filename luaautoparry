@@ -166,7 +166,7 @@ args = {
     [3] = {
         [name1] = rootpart.CFrame.Position + Vector3.new(0, 0, -65),
         [name2] = rootpart.CFrame.Position + Vector3.new(0, 0, -66),
-        [name3] = rootpart.CFrame.Position + Vector3.new(0, 0, -62)
+        [name3] = rootpart.CFrame.Position + Vector3.new(0, 0, -62),
         [name4] = rootpart.CFrame.Position + Vector3.new(0, 0, -61)
     },
     [4] = {
