@@ -31,10 +31,9 @@ local spam = false
 local tg = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
-local name1 = tostring(math.random(1534334,6343332))
-local name2 = tostring(math.random(1656394,6343143))
-local name3 = tostring(math.random(1284933,6262625))
-local name4 = tostring(math.random(1252433,6242544))
+local name = tostring(math.random(1534334,6343332))
+local anguloEmGraus = 90
+local anguloEmRadianos = math.rad(anguloEmGraus)
 
 
 print("sucesss run")
@@ -160,22 +159,22 @@ end
 
 local function argsAct()
 if realPlayer and realPlayer.Parent then
-args = {
-    [1] = 0.5,
-    [2] = rootpart.CFrame * CFrame.new(0, 200, -30),
-    [3] = {
-        [name1] = rootpart.CFrame.Position + Vector3.new(0, 0, -65),
-        [name2] = rootpart.CFrame.Position + Vector3.new(0, 0, -66),
-        [name3] = rootpart.CFrame.Position + Vector3.new(0, 0, -62),
-        [name4] = rootpart.CFrame.Position + Vector3.new(0, 0, -61)
-    },
-    [4] = {
-        [1] = 795.5,
-        [2] = 152.5
-    },
-    [5] = false
-}
-end
+    args = {
+        [1] = 0.5,
+        [2] = CFrame.new(0, 0, -10) * CFrame.Angles(0, anguloEmRadianos, 0),
+        [3] = {
+            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -65),
+            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -66),
+            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -62),
+            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -61)
+        },
+        [4] = {
+            [1] = 795.5,
+            [2] = 152.5
+        },
+        [5] = false
+    }
+    end
 end
 
 newBall()
@@ -194,9 +193,9 @@ local opponentTorso = opponent.HumanoidRootPart
 local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
 local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
 local requiredDistance = 20 + ((ballVelocity / 2.1) - (distanceToBall / 4))
-local spamDistance = 30 + (ballVelocity / 10)
+local spamDistance = 30 + (ballVelocity / 9)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
-local safeDistance = 25 + (ballVelocity / 9)
+local safeDistance = 25 + (ballVelocity / 8)
 local ballReq = 20 + (ballVelocity / 2)
 
 if targ ~= playerW then
