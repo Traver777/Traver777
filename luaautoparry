@@ -31,9 +31,6 @@ local spam = false
 local tg = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
-local name = tostring(math.random(1534334,6343332))
-local anguloEmGraus = 90
-local anguloEmRadianos = math.rad(anguloEmGraus)
 
 
 print("sucesss run")
@@ -161,12 +158,10 @@ local function argsAct()
 if realPlayer and realPlayer.Parent then
     args = {
         [1] = 0.5,
-        [2] = CFrame.new(0, 0, -10) * CFrame.Angles(0, anguloEmRadianos, 0),
+        [2] = CFrame.new(0, 0, -10) * CFrame.Angles(180, 0, 0),
         [3] = {
-            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -65),
-            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -66),
-            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -62),
-            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, -61)
+            ["5444434634"] = rootpart.CFrame.Position + Vector3.new(0, 0, -65),
+            ["4344353453"] = rootpart.CFrame.Position + Vector3.new(0, 0, -66),
         },
         [4] = {
             [1] = 795.5,
@@ -192,7 +187,7 @@ local playerTorso = ply.HumanoidRootPart
 local opponentTorso = opponent.HumanoidRootPart
 local distanceToBall = (playerTorso.Position - ball.Position).Magnitude
 local opponentDistance = (playerTorso.Position - opponentTorso.Position).Magnitude
-local requiredDistance = 20 + ((ballVelocity / 2.1) - (distanceToBall / 4))
+local requiredDistance = 25 + (ballVelocity / 2.1 - distanceToBall / 4)
 local spamDistance = 30 + (ballVelocity / 9)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 8)
