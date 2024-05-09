@@ -32,7 +32,7 @@ local tg = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
 local name = tostring(math.random(20000,21000))
-local ghz = math.random(-20,-40)
+local ghz = math.random(-40,-20)
 print("sucesss run")
 
 ScreenGui.Parent = game:GetService('CoreGui')
