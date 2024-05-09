@@ -31,7 +31,7 @@ local spam = false
 local tg = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
-local name = tostring(math.random(200000,210000))
+local name = tostring(math.random(20000,21000))
 local ghz = math.random(-20,-40)
 print("sucesss run")
 
