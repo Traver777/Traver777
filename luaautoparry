@@ -188,14 +188,12 @@ local ballPos = realBall.Position
 local opponentPos = realOther.HumanoidRootPart.Position
 local distanceToBall = (playerPos - ballPos).Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local requiredDistance = 22.5 + (ballVelocity / 2.2)
-local requiredDistance2 = 25 + (ballVelocity / 2.5)
+local requiredDistance = 20 + (ballVelocity / (2 + ballVelocity / 200))
 local spamDistance = 30 + (ballVelocity / 9)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 8)
 if targ ~= playerW then tg = true end
-if tg and ((ballVelocity <= 140 and distanceToBall <= requiredDistance) or
-(ballVelocity > 140 and distanceToBall <= requiredDistance2)) and
+if tg and (distanceToBall <= requiredDistance) and
 targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
