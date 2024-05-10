@@ -155,17 +155,20 @@ end
 end
 
 local function argsAct()
-    if realPlayer then
-        local basePosition = rootpart.CFrame.Position
-        local offsetPosition = Vector3.new(0, 0, ghz)
-        local finalPosition = basePosition + offsetPosition
-        args = {
-            0.5,
-            CFrame.new(0, 0, -10) * CFrame.Angles(math.rad(45), 0, 0),
-            {[name] = finalPosition},
-            {795.5, 152.5},
-            false
-        }
+if realPlayer and realPlayer.Parent then
+    args = {
+        [1] = 0.5,
+        [2] = CFrame.new(0, 0, -10) * CFrame.Angles(45, 0, 0),
+        [3] = {
+            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, ghz),
+            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, ghz),
+        },
+        [4] = {
+            [1] = 795.5,
+            [2] = 152.5
+        },
+        [5] = false
+    }
     end
 end
 
@@ -175,27 +178,21 @@ newOther()
 argsAct()
 
 local function checkNoMiss()
-if not (realBall and realPlayer and realOther) then
-return
-end
+if not (realBall and realPlayer and realOther) then return end
 local ballVelocity = realBall.Velocity.Magnitude
 local playerPos = realPlayer.HumanoidRootPart.Position
 local ballPos = realBall.Position
 local opponentPos = realOther.HumanoidRootPart.Position
 local distanceToBall = (playerPos - ballPos).Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local ballDirection = realBall.Velocity.Unit
-local toBallDirection = (ballPos - playerPos).Unit
-local isBallApproaching = ballDirection:Dot(toBallDirection) > 0
+local isBallApproaching = realBall.Velocity:Dot(playerPos - ballPos) > 0
 local dynamicDistance = ballVelocity * 0.47619 - distanceToBall * 0.25
 local requiredDistance = 25 + dynamicDistance
 local spamDistance = 30 + ballVelocity * 0.11111
 local spamDistanceLimit = 35 + ballVelocity * 0.1
 local safeDistance = 25 + ballVelocity * 0.125
 local ballReq = 20 + ballVelocity * 0.5
-if targ ~= playerW then
-tg = true
-end
+if targ ~= playerW then tg = true end
 if tg and isBallApproaching then
 local velocityCheck = (ballVelocity > 35 and distanceToBall <= requiredDistance) or
 (ballVelocity <= 35 and distanceToBall <= ballReq)
