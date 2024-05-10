@@ -190,7 +190,7 @@ local distanceToBall = (playerPos - ballPos).Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
 local requiredDistance = 22.5 + (ballVelocity / 2.2)
 local requiredDistance2 = 25 + (ballVelocity / 2.5)
-local spamDistance = 30 +(ballVelocity / 9)
+local spamDistance = 30 + (ballVelocity / 9)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 8)
 if targ ~= playerW then tg = true end
@@ -200,7 +200,7 @@ targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
 end
-if distanceToBall <= spamDistance and opponentDistance <= safeDistance and (distanceToBall <= spamDistanceLimit) then
+if (distanceToBall <= spamDistance) and (opponentDistance <= safeDistance) and (distanceToBall <= spamDistanceLimit) then
 if targ == playerW then
 contador = contador + 1
 if contador >= 2 then
@@ -247,18 +247,16 @@ pre2:Disconnect()
 end
 end)
 
-local real = spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent
-
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
 pre3 = sim:Connect(newAll)
 pre4 = sim2:Connect(function()
-if real then
+if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
 pre5 = sim2:Connect(function()
-if real then
+if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
