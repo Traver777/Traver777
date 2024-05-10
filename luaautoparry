@@ -33,8 +33,6 @@ local tg = true
 local fc = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
-local name = tostring(math.random(20000,21000))
-local ghz = math.random(-40,-20)
 print("sucesss run")
 
 ScreenGui.Parent = game:GetService('CoreGui')
@@ -170,8 +168,7 @@ args = {
 [1] = 0.5,
 [2] = CFrame.new(0, 0, -10) * CFrame.Angles(45, 0, 0),
 [3] = {
-[name] = rootpart.CFrame.Position + Vector3.new(0, 0, ghz),
-[name] = rootpart.CFrame.Position + Vector3.new(0, 0, ghz),
+["5353535434"] = rootpart.CFrame.Position + Vector3.new(0, 0, -30),
 },
 [4] = {
 [1] = 795.5,
@@ -196,22 +193,20 @@ local opponentPos = realOther.HumanoidRootPart.Position
 local distanceToBall = (playerPos - ballPos).Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
 local isBallApproaching = realBall.Velocity:Dot(playerPos - ballPos) > 0
-local dynamicDistance = ballVelocity * 0.47619 - distanceToBall * 0.25
-local requiredDistance = 25 + dynamicDistance
-local spamDistance = 30 + ballVelocity * 0.11111
-local spamDistanceLimit = 35 + ballVelocity * 0.1
-local safeDistance = 25 + ballVelocity * 0.125
-local ballReq = 20 + ballVelocity * 0.5
+local requiredDistance = 22 + (ballVelocity / 2.2)
+local requiredDistance2 = 25 + (ballVelocity / 2.5)
+local spamDistance = 30 + (ballVelocity * 0.11111)
+local spamDistanceLimit = 35 + (ballVelocity * 0.1)
+local safeDistance = 25 + (ballVelocity * 0.125)
 if targ ~= playerW then tg = true end
 if targ == playerW and not isBallApproaching then fc = false end
-if tg == true then
-local velocityCheck = (ballVelocity > 35 and distanceToBall <= requiredDistance) or
-(ballVelocity <= 35 and distanceToBall <= ballReq)
+if tg == true and fc == true then
+local velocityCheck = ballVelocity <= 140 and (distanceToBall <= requiredDistance) or ballVelocity > 140 and (distanceToBall <= requiredDistance2)
 if velocityCheck and targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
 end
-if isBallApproaching then fc = true end
+if targ ~= playerW or isBallApproaching then fc = true end
 end
 local inSpamZone = distanceToBall <= spamDistance and opponentDistance <= safeDistance
 local inSpamLimit = distanceToBall <= spamDistanceLimit
