@@ -30,7 +30,6 @@ local isClick = true
 local contador = 0
 local spam = false
 local tg = true
-local fc = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
 print("sucesss run")
@@ -199,10 +198,8 @@ local spamDistance = 30 + ballVelocity * 0.11111
 local spamDistanceLimit = 35 + ballVelocity * 0.1
 local safeDistance = 25 + ballVelocity * 0.125
 if targ ~= playerW then tg = true end
-if targ == playerW and not isBallApproaching then fc = false end
-if targ ~= playerW or isBallApproaching then fc = true end
-if tg == true and fc == true then
-local velocityCheck = ballVelocity <= 140 and distanceToBall <= requiredDistance or ballVelocity > 140 and distanceToBall <= requiredDistance2
+if tg == true then
+local velocityCheck = ballVelocity <= 150 and distanceToBall <= requiredDistance or ballVelocity > 150 and distanceToBall <= requiredDistance2
 if velocityCheck and targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
