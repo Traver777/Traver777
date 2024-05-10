@@ -14,8 +14,8 @@ local ToggleZOFF = Instance.new("TextButton")
 local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
-local sim = run.Heartbeat
-local sim2 = run.RenderStepped
+local sim = run.PostSimulation
+local sim2 = run.PreRender
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -163,17 +163,13 @@ end
 
 local function argsAct()
 if realPlayer and realPlayer.Parent then
+local rootPos = rootpart.CFrame.Position
 args = {
-[1] = 0.5,
-[2] = CFrame.new(0, 0, -10) * CFrame.Angles(45, 0, 0),
-[3] = {
-["5353535434"] = rootpart.CFrame.Position + Vector3.new(0, 0, -30),
-},
-[4] = {
-[1] = 795.5,
-[2] = 152.5
-},
-[5] = false
+0.5,
+CFrame.new(0, 0, -50),
+{["5353535434"] = rootPos + Vector3.new(0, 0, -30)},
+{795.5, 152.5},
+false
 }
 end
 end
@@ -191,19 +187,20 @@ local ballPos = realBall.Position
 local opponentPos = realOther.HumanoidRootPart.Position
 local distanceToBall = (playerPos - ballPos).Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local isBallApproaching = realBall.Velocity:Dot(playerPos - ballPos) > 0
-local requiredDistance = 22 + ballVelocity / 2.2
-local requiredDistance2 = 25 + ballVelocity / 2.5
-local spamDistance = 30 + ballVelocity * 0.11111
-local spamDistanceLimit = 35 + ballVelocity * 0.1
-local safeDistance = 25 + ballVelocity * 0.125
+local function calcDistance(offset, divisor)
+return 25 + ballVelocity / divisor + offset
+end
+local requiredDistance = calcDistance(0, 2.2)
+local requiredDistance2 = calcDistance(0, 2.5)
+local spamDistance = calcDistance(5, 9)
+local spamDistanceLimit = calcDistance(10, 10)
+local safeDistance = calcDistance(0, 8)
 if targ ~= playerW then tg = true end
-if tg == true then
-local velocityCheck = ballVelocity <= 150 and distanceToBall <= requiredDistance or ballVelocity > 150 and distanceToBall <= requiredDistance2
-if velocityCheck and targ == playerW then
+if tg and ((ballVelocity <= 150 and distanceToBall <= requiredDistance) or 
+(ballVelocity > 150 and distanceToBall <= requiredDistance2)) and 
+targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
-end
 end
 local inSpamZone = distanceToBall <= spamDistance and opponentDistance <= safeDistance
 local inSpamLimit = distanceToBall <= spamDistanceLimit
@@ -215,6 +212,8 @@ spam = false
 contador = 0
 end
 end
+
+checkNoMiss()
 
 local function newAll()
 newBall()
@@ -246,16 +245,18 @@ pre2:Disconnect()
 end
 end)
 
+local real = spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent
+
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
 pre3 = sim:Connect(newAll)
 pre4 = sim2:Connect(function()
-if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
+if real then
 parry:FireServer(unpack(args))
 end
 end)
 pre5 = sim2:Connect(function()
-if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
+if real then
 parry:FireServer(unpack(args))
 end
 end)
