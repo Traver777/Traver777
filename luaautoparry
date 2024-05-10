@@ -163,10 +163,11 @@ end
 
 local function argsAct()
 if realPlayer and realPlayer.Parent then
-local rootPos = rootpart.CFrame.Position
+local rootCFrame
+local rootPos = rootCFrame.Position
 args = {
 0.5,
-CFrame.new(0, 0, -50),
+rootCFrame * CFrame.new(0, 0, -50),
 {["5353535434"] = rootPos + Vector3.new(0, 0, -30)},
 {795.5, 152.5},
 false
@@ -196,8 +197,8 @@ local spamDistance = calcDistance(5, 9)
 local spamDistanceLimit = calcDistance(10, 10)
 local safeDistance = calcDistance(0, 8)
 if targ ~= playerW then tg = true end
-if tg and ((ballVelocity <= 150 and distanceToBall <= requiredDistance) or 
-(ballVelocity > 150 and distanceToBall <= requiredDistance2)) and 
+if tg and ((ballVelocity <= 150 and distanceToBall <= requiredDistance) or
+(ballVelocity > 150 and distanceToBall <= requiredDistance2)) and
 targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
