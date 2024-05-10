@@ -14,7 +14,6 @@ local ToggleZOFF = Instance.new("TextButton")
 local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 local sim = run.Heartbeat
 local sim2 = run.RenderStepped
 local realBall = nil
@@ -27,9 +26,11 @@ local pre2 = nil
 local pre3 = nil
 local pre4 = nil
 local pre5 = nil
+local isClick = true
 local contador = 0
 local spam = false
 local tg = true
+local fc = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
 local name = tostring(math.random(20000,21000))
@@ -60,8 +61,10 @@ Toggle.TextColor3 = Color3.fromRGB(0, 0, 0)
 Toggle.TextSize = 33.000
 Toggle.TextWrapped = true
 Toggle.MouseButton1Click:Connect(function()
+if isClick == true then
 Toggle.Visible = false
 ToggleOFF.Visible = true
+end
 end)
 
 ToggleOFF.Name = "ToggleOFF"
@@ -78,8 +81,10 @@ ToggleOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleOFF.TextSize = 33.000
 ToggleOFF.TextWrapped = true
 ToggleOFF.MouseButton1Click:Connect(function()
+if isClick == true then
 ToggleOFF.Visible = false
 Toggle.Visible = true
+end
 end)
 
 ToggleZ.Name = "Toggle"
@@ -96,8 +101,10 @@ ToggleZ.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZ.TextSize = 33.000
 ToggleZ.TextWrapped = true
 ToggleZ.MouseButton1Click:Connect(function()
-    ToggleZ.Visible = false
-    ToggleZOFF.Visible = true
+if isClick == true then
+ToggleZ.Visible = false
+ToggleZOFF.Visible = true
+end
 end)
 
 ToggleZOFF.Name = "ToggleOFF"
@@ -114,8 +121,10 @@ ToggleZOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZOFF.TextSize = 33.000
 ToggleZOFF.TextWrapped = true
 ToggleZOFF.MouseButton1Click:Connect(function()
-    ToggleZOFF.Visible = false
-    ToggleZ.Visible = true
+if isClick == true then
+ToggleZOFF.Visible = false
+ToggleZ.Visible = true
+end
 end)
 
 local function newBall()
@@ -194,13 +203,15 @@ local spamDistanceLimit = 35 + ballVelocity * 0.1
 local safeDistance = 25 + ballVelocity * 0.125
 local ballReq = 20 + ballVelocity * 0.5
 if targ ~= playerW then tg = true end
-if tg and isBallApproaching then
+if targ == playerW and not isBallApproaching then fc = false end
+if tg == true then
 local velocityCheck = (ballVelocity > 35 and distanceToBall <= requiredDistance) or
 (ballVelocity <= 35 and distanceToBall <= ballReq)
 if velocityCheck and targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
 end
+if isBallApproaching then fc = true end
 end
 local inSpamZone = distanceToBall <= spamDistance and opponentDistance <= safeDistance
 local inSpamLimit = distanceToBall <= spamDistanceLimit
@@ -222,6 +233,7 @@ checkNoMiss()
 end
 
 Toggle.MouseButton1Click:Connect(function()
+if isClick == true then
 pre = sim2:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
@@ -232,14 +244,18 @@ if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
+end
 end)
 
 ToggleOFF.MouseButton1Click:Connect(function()
+if isClick == true then
 pre:Disconnect()
 pre2:Disconnect()
+end
 end)
 
 ToggleZ.MouseButton1Click:Connect(function()
+if isClick == true then
 pre3 = sim:Connect(newAll)
 pre4 = sim2:Connect(function()
 if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
@@ -251,72 +267,83 @@ if spam == true and realBall and realBall.Parent and realOther and realOther.Par
 parry:FireServer(unpack(args))
 end
 end)
+end
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
+if isClick == true then
 pre3:Disconnect()
 pre4:Disconnect()
 pre5:Disconnect()
+end
 end)
 
-local function makeDraggable(frame, buttonList)
-    local dragging = false
-    local dragStart = nil
-    local startPos = nil
-    local clickTime = nil
-    local function update(input)
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-    local function startDrag(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            dragStart = input.Position
-            startPos = frame.Position
-            clickTime = tick()
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
-            end)
-        end
-    end
-    local function onButtonClick(button)
-        if not dragging and tick() - clickTime >= 0.5 then 
-            print(button.Name .. " foi clicado.")
-        end
-    end
-    for _, button in ipairs(buttonList) do
-        button.InputBegan:Connect(startDrag)
-        button.MouseButton1Click:Connect(function() onButtonClick(button) end)
-    end
-    frame.InputBegan:Connect(startDrag)   UserInputService.InputChanged:Connect(function(input)
-        if dragging and (input == dragInput or input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-            update(input)
-        end
-    end)
+local dragging
+local dragStart
+local startPos
+local function update(input)
+if dragging then
+local delta = input.Position - dragStart
+Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+if (delta.magnitude > 2) then
+isClick = false
 end
-local buttons = {Toggle, ToggleOFF, ToggleZ, ToggleZOFF}
+end
+end
+local function connectDragEvents(toggle)
+toggle.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+dragging, dragStart, startPos = true, input.Position, Frame.Position
+isClick = true
+end
+end)
+toggle.InputChanged:Connect(function(input)
+if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+update(input)
+end
+end)
+toggle.InputEnded:Connect(function(input)
+if dragging then
+dragging = false
+end
+end)
+end
 
-makeDraggable(Frame, buttons)
+connectDragEvents(Toggle)
+connectDragEvents(ToggleOFF)
+connectDragEvents(ToggleZ)
+connectDragEvents(ToggleZOFF)
 
-local function changeColors(frame, buttons, colors)
-local currentIndex = 1
-while true do
-local color = Color3.fromRGB(unpack(colors[currentIndex]))
+local function lerpColor(color1, color2, t)
+return {
+color1[1] + (color2[1] - color1[1]) * t,
+color1[2] + (color2[2] - color1[2]) * t,
+color1[3] + (color2[3] - color1[3]) * t
+}
+end
+local function changeColors(frame, buttons, color1, color2, duration)
+for t = 0, 1, 0.01 do
+local lerpedColor = lerpColor(color1, color2, t)
+local color = Color3.fromRGB(unpack(lerpedColor))
 frame.BackgroundColor3 = color
 for _, button in pairs(buttons) do
 button.TextColor3 = color
 end
-currentIndex = currentIndex % #colors + 1
+wait(duration * 0.01)
+end
+end
+local buttons = {Toggle, ToggleOFF, ToggleZ, ToggleZOFF}
+local red = {255, 0, 0}
+local blue = {0, 0, 255}
+local duration = 2
+spawn(function()
+while true do
+changeColors(Frame, buttons, red, blue, duration)
+wait(1)
+changeColors(Frame, buttons, blue, red, duration)
 wait(1)
 end
-end
+end)
 
-local colors = {
-    {255, 0, 0},
-    {0, 255, 0},
-    {0, 0, 255},
-}
-
-spawn(function() changeColors(Frame, buttons, colors) end)
+Frame.Active = true
+Frame.Draggable = true
