@@ -163,7 +163,7 @@ end
 
 local function argsAct()
 if realPlayer and realPlayer.Parent then
-local rootCFrame
+local rootCFrame = rootpart.CFrame
 local rootPos = rootCFrame.Position
 args = {
 0.5,
