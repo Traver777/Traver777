@@ -14,8 +14,9 @@ local ToggleZOFF = Instance.new("TextButton")
 local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
-local sim = run.PostSimulation
-local sim2 = run.PreRender
+local UserInputService = game:GetService("UserInputService")
+local sim = run.Heartbeat
+local sim2 = run.RenderStepped
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -47,7 +48,7 @@ Frame.Size = UDim2.new(0, 115, 0, 85)
 
 Toggle.Name = "Toggle"
 Toggle.Parent = Frame
-Toggle.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
+Toggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Toggle.BorderSizePixel = 0
 Toggle.Position = UDim2.new(0.067012012, 0, 0.5103128483, 0)
@@ -65,7 +66,7 @@ end)
 
 ToggleOFF.Name = "ToggleOFF"
 ToggleOFF.Parent = Frame
-ToggleOFF.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
+ToggleOFF.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 ToggleOFF.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ToggleOFF.BorderSizePixel = 0
 ToggleOFF.Position = UDim2.new(0.067012012, 0, 0.5103128483, 0)
@@ -83,7 +84,7 @@ end)
 
 ToggleZ.Name = "Toggle"
 ToggleZ.Parent = Frame
-ToggleZ.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
+ToggleZ.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZ.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZ.BorderSizePixel = 0
 ToggleZ.Position = UDim2.new(0.067012012, 0, 0.053128483, 0)
@@ -101,7 +102,7 @@ end)
 
 ToggleZOFF.Name = "ToggleOFF"
 ToggleZOFF.Parent = Frame
-ToggleZOFF.BackgroundColor3 = Color3.fromRGB(248, 248, 248)
+ToggleZOFF.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZOFF.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZOFF.BorderSizePixel = 0
 ToggleZOFF.Position = UDim2.new(0.067012012, 0, 0.053128483, 0)
@@ -156,20 +157,20 @@ end
 
 local function argsAct()
 if realPlayer and realPlayer.Parent then
-    args = {
-        [1] = 0.5,
-        [2] = CFrame.new(0, 0, -10) * CFrame.Angles(45, 0, 0),
-        [3] = {
-            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, ghz),
-            [name] = rootpart.CFrame.Position + Vector3.new(0, 0, ghz),
-        },
-        [4] = {
-            [1] = 795.5,
-            [2] = 152.5
-        },
-        [5] = false
-    }
-    end
+args = {
+[1] = 0.5,
+[2] = CFrame.new(0, 0, -10) * CFrame.Angles(45, 0, 0),
+[3] = {
+[name] = rootpart.CFrame.Position + Vector3.new(0, 0, ghz),
+[name] = rootpart.CFrame.Position + Vector3.new(0, 0, ghz),
+},
+[4] = {
+[1] = 795.5,
+[2] = 152.5
+},
+[5] = false
+}
+end
 end
 
 newBall()
@@ -258,5 +259,64 @@ pre4:Disconnect()
 pre5:Disconnect()
 end)
 
-Frame.Active = true
-Frame.Draggable = true
+local function makeDraggable(frame, buttonList)
+    local dragging = false
+    local dragStart = nil
+    local startPos = nil
+    local clickTime = nil
+    local function update(input)
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+    local function startDrag(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            clickTime = tick()
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end
+    local function onButtonClick(button)
+        if not dragging and tick() - clickTime >= 0.5 then 
+            print(button.Name .. " foi clicado.")
+        end
+    end
+    for _, button in ipairs(buttonList) do
+        button.InputBegan:Connect(startDrag)
+        button.MouseButton1Click:Connect(function() onButtonClick(button) end)
+    end
+    frame.InputBegan:Connect(startDrag)   UserInputService.InputChanged:Connect(function(input)
+        if dragging and (input == dragInput or input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            update(input)
+        end
+    end)
+end
+local buttons = {Toggle, ToggleOFF, ToggleZ, ToggleZOFF}
+
+makeDraggable(Frame, buttons)
+
+local function changeColors(frame, buttons, colors)
+local currentIndex = 1
+while true do
+local color = Color3.fromRGB(unpack(colors[currentIndex]))
+frame.BackgroundColor3 = color
+for _, button in pairs(buttons) do
+button.TextColor3 = color
+end
+currentIndex = currentIndex % #colors + 1
+wait(1)
+end
+end
+
+local colors = {
+    {255, 0, 0},
+    {0, 255, 0},
+    {0, 0, 255},
+}
+
+spawn(function() changeColors(Frame, buttons, colors) end)
