@@ -27,6 +27,7 @@ local pre2 = nil
 local pre3 = nil
 local pre4 = nil
 local pre5 = nil
+local pre6 = nil
 local isClick = true
 local contador = 0
 local spam = false
@@ -45,7 +46,7 @@ Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.2012012, 0, 0.343128483, 0)
 Frame.Size = UDim2.new(0, 115, 0, 85)
-uiCorner.CornerRadius = UDim.new(0, 5)
+uiCorner.CornerRadius = UDim.new(0, 8)
 uiCorner.Parent = Frame
 
 
@@ -186,6 +187,9 @@ newOther()
 argsAct()
 
 local function checkNoMiss()
+if not realBall then
+tg = true
+end
 if not (realBall and realPlayer and realOther) then return end
 local ballVelocity = realBall.Velocity.Magnitude
 local playerPos = realPlayer.HumanoidRootPart.Position
@@ -263,6 +267,11 @@ if spam == true and realBall and realBall.Parent and realOther and realOther.Par
 parry:FireServer(unpack(args))
 end
 end)
+pre6 = sim2:Connect(function()
+if spam == true and realBall and realBall.Parent and realOther and realOther.Parent and realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
+end
+end)
 end
 end)
 
@@ -271,6 +280,7 @@ if isClick == true then
 pre3:Disconnect()
 pre4:Disconnect()
 pre5:Disconnect()
+pre6:Disconnect()
 end
 end)
 
