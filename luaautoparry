@@ -8,6 +8,10 @@ game:GetService("ReplicatedStorage").Security:Destroy() game:GetService("Players
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local uiCorner = Instance.new("UICorner")
+local uiCorner2 = Instance.new("UICorner")
+local uiCorner3 = Instance.new("UICorner")
+local uiCorner4 = Instance.new("UICorner")
+local uiCorner5 = Instance.new("UICorner")
 local Toggle = Instance.new("TextButton")
 local ToggleOFF = Instance.new("TextButton")
 local ToggleZ = Instance.new("TextButton")
@@ -63,6 +67,8 @@ Toggle.Text = "spam"
 Toggle.TextColor3 = Color3.fromRGB(0, 0, 0)
 Toggle.TextSize = 33.000
 Toggle.TextWrapped = true
+uiCorner2.CornerRadius = UDim.new(0, 8)
+uiCorner2.Parent = Toggle
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
 Toggle.Visible = false
@@ -83,6 +89,8 @@ ToggleOFF.Text = "unspam"
 ToggleOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleOFF.TextSize = 33.000
 ToggleOFF.TextWrapped = true
+uiCorner3.CornerRadius = UDim.new(0, 8)
+uiCorner3.Parent = ToggleOFF
 ToggleOFF.MouseButton1Click:Connect(function()
 if isClick == true then
 ToggleOFF.Visible = false
@@ -103,6 +111,8 @@ ToggleZ.Text = "parry"
 ToggleZ.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZ.TextSize = 33.000
 ToggleZ.TextWrapped = true
+uiCorner4.CornerRadius = UDim.new(0, 8)
+uiCorner4.Parent = ToggleZ
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
 ToggleZ.Visible = false
@@ -123,6 +133,8 @@ ToggleZOFF.Text = "unparry"
 ToggleZOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
 ToggleZOFF.TextSize = 33.000
 ToggleZOFF.TextWrapped = true
+uiCorner5.CornerRadius = UDim.new(0, 8)
+uiCorner5.Parent = ToggleZOFF
 ToggleZOFF.MouseButton1Click:Connect(function()
 if isClick == true then
 ToggleZOFF.Visible = false
