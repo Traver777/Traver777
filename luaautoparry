@@ -210,18 +210,14 @@ local ballVelocity = realBall.Velocity.Magnitude
 local playerPos = realPlayer.HumanoidRootPart.Position
 local ballPos = realBall.Position
 local distanceToBall = (playerPos - ballPos).Magnitude
-local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 165)))) / (2 + (ballVelocity / (220 + ballVelocity / 10))))
-local plyDirec = (playerPos - ballPos).Unit
-local ballDirec = realBall.Velocity.Unit
-local onPly = plyDirec:Dot(ballDirec)
+local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 175)))) / (2 + (ballVelocity / (210 + ballVelocity / 10))))
 if targ ~= playerW then tg = true end
-if tg and onPly > 0 and (distanceToBall <= requiredDistance) and
+if tg and (distanceToBall <= requiredDistance) and
 targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
 end
 end
-
 
 local function spamF()
 if not (realBall and realPlayer and realOther) then return end
