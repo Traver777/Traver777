@@ -261,42 +261,46 @@ pre2:Disconnect()
 end
 end)
 
-local ser1 = nil
-local ser2 = nil
-local tempoDesejadoSer1 = 1 / 60
-local tempoDesejadoSer2 = 1 / (60 * 4)
-local ultimoTempoSer1 = 0
-local ultimoTempoSer2 = 0
+local ser1=nil
+local ser2=nil
+local ser3=nil
+local intervalo1=1/(2*60)
+local intervalo2=1/(4*60)
+local tempoAnterior1=tick()
+local tempoAnterior2=tick()
 
-local function iniciarLoops()
-if isClick == true then 
-ser1 = run.Heartbeat:Connect(function(deltaTime)
-ultimoTempoSer1 = ultimoTempoSer1 + deltaTime
-if ultimoTempoSer1 >= tempoDesejadoSer1 then
+ToggleZ.MouseButton1Click:Connect(function()
+if isClick==true then
+ser1=run.Heartbeat:Connect(function()
+if tick()-tempoAnterior1>=intervalo1 then
 newAll()
-ultimoTempoSer1 = 0
+tempoAnterior1=tick()
 end
 end)
-ser2 = run.RenderStepped:Connect(function(deltaTime)
+ser2=run.RenderStepped:Connect(function()
 if spam and realBall and realOther and realPlayer then
-ultimoTempoSer2 = ultimoTempoSer2 + deltaTime
-if ultimoTempoSer2 >= tempoDesejadoSer2 then
+if tick()-tempoAnterior2>=intervalo2 then
 parry:FireServer(unpack(args))
-ultimoTempoSer2 = 0
+tempoAnterior2=tick()
+end
+end
+end)
+ser3=run.RenderStepped:Connect(function()
+if spam and realBall and realOther and realPlayer then
+if tick()-tempoAnterior2>=intervalo2 then
+parry:FireServer(unpack(args))
+tempoAnterior2=tick()
 end
 end
 end)
 end
-end
-
-ToggleZOFF.MouseButton1Click:Connect(function()
-iniciarLoops()
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
 if isClick == true then
 ser1:Disconnect()
 ser2:Disconnect()
+ser3:Disconnect()
 end
 end)
 
