@@ -263,33 +263,34 @@ end)
 
 local ser1 = nil
 local ser2 = nil
+local tempoDesejadoSer1 = 1 / 60
+local tempoDesejadoSer2 = 1 / (60 * 4)
+local ultimoTempoSer1 = 0
+local ultimoTempoSer2 = 0
 
-local function iniciarCorrotinas()
-if isClick == true then
-ser1 = run.Heartbeat:Connect(newAll)
-ser2 = run.Heartbeat:Connect(function()
-if spam == true and realBall and realOther and realPlayer then
-for i = 1, 4 do
+local function iniciarLoops()
+if isClick == true then 
+ser1 = run.Heartbeat:Connect(function(deltaTime)
+ultimoTempoSer1 = ultimoTempoSer1 + deltaTime
+if ultimoTempoSer1 >= tempoDesejadoSer1 then
+newAll()
+ultimoTempoSer1 = 0
+end
+end)
+ser2 = run.RenderStepped:Connect(function(deltaTime)
+if spam and realBall and realOther and realPlayer then
+ultimoTempoSer2 = ultimoTempoSer2 + deltaTime
+if ultimoTempoSer2 >= tempoDesejadoSer2 then
 parry:FireServer(unpack(args))
+ultimoTempoSer2 = 0
 end
 end
 end)
 end
-end
-
-local function pararCorrotinas()
-if isClick == true then
-ser1:Disconnect()
-ser2:Disconnect()
-end
-end
-
-ToggleZ.MouseButton1Click:Connect(function()
-iniciarCorrotinas()
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
-pararCorrotinas()
+iniciarLoops()
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
