@@ -264,10 +264,11 @@ end)
 local ser1=nil
 local ser2=nil
 local ser3=nil
-local intervalo1=1/(2*60)
-local intervalo2=1/(4*60)
+local intervalo1=1/120
+local intervalo2=1/240
 local tempoAnterior1=tick()
 local tempoAnterior2=tick()
+local tempoAnterior3=tick()
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick==true then
@@ -287,9 +288,9 @@ end
 end)
 ser3=run.RenderStepped:Connect(function()
 if spam and realBall and realOther and realPlayer then
-if tick()-tempoAnterior2>=intervalo2 then
+if tick()-tempoAnterior3>=intervalo2 then
 parry:FireServer(unpack(args))
-tempoAnterior2=tick()
+tempoAnterior3=tick()
 end
 end
 end)
