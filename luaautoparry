@@ -19,8 +19,6 @@ local ToggleZOFF = Instance.new("TextButton")
 local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
-local sim = run.PostSimulation
-local sim2 = run.PreRender
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -246,23 +244,23 @@ spamF()
 local function newA()
 newBa()
 newPl()
-newOt()
 check()
 end
 
 local function othrF()
 argsA()
+newOt()
 spamF()
 end
 
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
-pre = sim2:Connect(function(deltaTime)
+pre = sim2:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
-pre2 = sim2:Connect(function(deltaTime)
+pre2 = sim2:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
@@ -278,20 +276,20 @@ end
 end)
 
 local intervalo = 1/240
-local ultimoTempo = tick()
+local ultimoTempo = DateTime.now()
 
 local function executarAcoes()
-local tempoAtual = tick()
-if tempoAtual - ultimoTempo >= intervalo then
+local tempoAtual = DateTime.now()
+if (tempoAtual - ultimoTempo).TotalSeconds >= intervalo then
 newA()
 othrF()
 ultimoTempo = tempoAtual
 end
 end
 
-local function executarAcoes2()
-local tempoAtual = tick()
-if tempoAtual - ultimoTempo >= intervalo then
+local function acaoPreRender()
+local tempoAtual = DateTime.now()
+if (tempoAtual - ultimoTempo).TotalSeconds >= intervalo then
 if spam == true and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
@@ -301,10 +299,11 @@ end
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-pre3 = sim:Connect(executarAcoes)
-pre4 = sim2:Connect(executarAcoes2)
+pre3 = run.Heartbeat:Connect(executarAcoes)
+pre4 = run.RenderStepped:Connect(acaoPreRender)
 end
 end)
+
 
 ToggleZOFF.MouseButton1Click:Connect(function()
 if isClick == true then
