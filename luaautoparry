@@ -274,8 +274,10 @@ end
 end)
 
 local intervalo = 1/120
+local intervalo2 = 1/360
 local ultimoTempo = os.clock()
-local spawn1, spawn2
+local spawn1 = nil
+local spawn2 = nil
 
 local function executarAcoes()
 while true do
@@ -292,7 +294,7 @@ end
 local function acaoPreRender()
 while true do
 local tempoAtual = os.clock()
-if tempoAtual - ultimoTempo >= intervalo then
+if tempoAtual - ultimoTempo >= intervalo2 then
 if spam == true and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
@@ -310,11 +312,9 @@ end
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
-if isClick == true and spawn1 and spawn2 then
+if isClick == true then
 coroutine.close(spawn1)
 coroutine.close(spawn2)
-spawn1 = nil
-spawn2 = nil
 end
 end)
 
