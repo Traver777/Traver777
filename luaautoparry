@@ -21,7 +21,6 @@ local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local sim = run.PostSimulation
 local sim2 = run.PreRender
-local sim3 = run.Heartbeat
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -31,10 +30,6 @@ local pre = nil
 local pre2 = nil
 local pre3 = nil
 local pre4 = nil
-local pre5 = nil
-local pre6 = nil
-local pre7 = nil
-local pre8 = nil
 local isClick = true
 local contador = 0
 local spam = false
@@ -248,14 +243,14 @@ end
 check()
 spamF()
 
-local function newA(deltaTime)
+local function newA()
 newBa()
 newPl()
 newOt()
 check()
 end
 
-local function othrF(deltaTime)
+local function othrF()
 argsA()
 spamF()
 end
@@ -282,30 +277,32 @@ pre2:Disconnect()
 end
 end)
 
+local intervalo = 1/240
+local ultimoTempo = tick()
+
+local function executarAcoes()
+local tempoAtual = tick()
+if tempoAtual - ultimoTempo >= intervalo then
+newA()
+othrF()
+ultimoTempo = tempoAtual
+end
+end
+
+local function executarAcoes2()
+local tempoAtual = tick()
+if tempoAtual - ultimoTempo >= intervalo then
+if spam == true and realBall and realOther and realPlayer then
+parry:FireServer(unpack(args))
+end
+ultimoTempo = tempoAtual
+end
+end
+
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-pre3 = sim3:Connect(newA)
-pre4 = sim:Connect(othrF)
-pre5 = sim2:Connect(function(deltaTime)
-if spam == true and realBall and realOther and realPlayer then
-parry:FireServer(unpack(args))
-end
-end)
-pre6 = sim2:Connect(function(deltaTime)
-if spam == true and realBall and realOther and realPlayer then
-parry:FireServer(unpack(args))
-end
-end)
-pre7 = sim2:Connect(function(deltaTime)
-if spam == true and realBall and realOther and realPlayer then
-parry:FireServer(unpack(args))
-end
-end)
-pre8 = sim2:Connect(function(deltaTime)
-if spam == true and realBall and realOther and realPlayer then
-parry:FireServer(unpack(args))
-end
-end)
+pre3 = sim:Connect(executarAcoes)
+pre4 = sim2:Connect(executarAcoes2)
 end
 end)
 
@@ -313,10 +310,6 @@ ToggleZOFF.MouseButton1Click:Connect(function()
 if isClick == true then
 pre3:Disconnect()
 pre4:Disconnect()
-pre5:Disconnect()
-pre6:Disconnect()
-pre7:Disconnect()
-pre8:Disconnect()
 end
 end)
 
