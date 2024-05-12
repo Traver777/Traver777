@@ -274,47 +274,61 @@ end
 end)
 
 local intervalo = 1/120
-local intervalo2 = 1/360
-local ultimoTempo = os.clock()
-local spawn1 = nil
-local spawn2 = nil
+local intervalo2 = 1/240
+local ultimoTempo1 = os.clock()
+local ultimoTempo2 = os.clock()
+local spawn1, spawn2
+local isClick = true
 
 local function executarAcoes()
 while true do
 local tempoAtual = os.clock()
-if tempoAtual - ultimoTempo >= intervalo then
+if tempoAtual >= ultimoTempo1 + intervalo then
 newA()
 othrF()
-ultimoTempo = tempoAtual
+ultimoTempo1 = tempoAtual
 end
-wait()
+coroutine.yield()
 end
 end
 
 local function acaoPreRender()
 while true do
 local tempoAtual = os.clock()
-if tempoAtual - ultimoTempo >= intervalo2 then
-if spam == true and realBall and realOther and realPlayer then
+if tempoAtual >= ultimoTempo2 + intervalo2 then
+if spam and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
-ultimoTempo = tempoAtual
+ultimoTempo2 = tempoAtual
 end
-wait()
+coroutine.yield()
+end
+end
+
+local function iniciarCorrotinas()
+spawn1 = coroutine.create(executarAcoes)
+spawn2 = coroutine.create(acaoPreRender)
+coroutine.resume(spawn1)
+coroutine.resume(spawn2)
+end
+
+local function pararCorrotinas()
+if spawn1 and spawn2 then
+coroutine.close(spawn1)
+coroutine.close(spawn2)
+spawn1, spawn2 = nil, nil
 end
 end
 
 ToggleZ.MouseButton1Click:Connect(function()
-if isClick == true then
-spawn1 = spawn(executarAcoes)
-spawn2 = spawn(acaoPreRender)
+if isClick and not spawn1 and not spawn2 then
+iniciarCorrotinas()
 end
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
-if isClick == true then
-coroutine.close(spawn1)
-coroutine.close(spawn2)
+if isClick then
+pararCorrotinas()
 end
 end)
 
