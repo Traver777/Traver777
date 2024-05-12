@@ -261,35 +261,19 @@ pre2:Disconnect()
 end
 end)
 
-local intervalo = 1/120
-local intervalo2 = 1/240
-local tempoParaAcao = 0
-local tempoParaPreRender = 0
 local ser1 = nil
 local ser2 = nil
 
-local function executarAcoes(deltaTime)
-tempoParaAcao = tempoParaAcao + deltaTime
-if tempoParaAcao >= intervalo then
-tempoParaAcao = tempoParaAcao - intervalo
-newAll()
-end
-end
-
-local function acaoPreRender(deltaTime)
-tempoParaPreRender = tempoParaPreRender + deltaTime
-if tempoParaPreRender >= intervalo2 then
-tempoParaPreRender = tempoParaPreRender - intervalo2
+local function iniciarCorrotinas()
+if isClick == true then
+ser1 = run.Heartbeat:Connect(newAll)
+ser2 = run.Heartbeat:Connect(function()
 if spam == true and realBall and realOther and realPlayer then
+for i = 1, 4 do
 parry:FireServer(unpack(args))
 end
 end
-end
-
-local function iniciarCorrotinas()
-if isClick == true then
-ser1 = run.Heartbeat:Connect(executarAcoes)
-ser2 = run.Heartbeat:Connect(acaoPreRender)
+end)
 end
 end
 
