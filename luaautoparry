@@ -262,12 +262,12 @@ end
 
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
-pre = sim2:Connect(function()
+pre = sim2:Connect(function(deltaTime)
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
-pre2 = sim2:Connect(function()
+pre2 = sim2:Connect(function(deltaTime)
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
@@ -286,22 +286,22 @@ ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
 pre3 = sim3:Connect(newA)
 pre4 = sim:Connect(othrF)
-pre5 = sim2:Connect(function()
+pre5 = sim2:Connect(function(deltaTime)
 if spam == true and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
 end)
-pre6 = sim2:Connect(function()
+pre6 = sim2:Connect(function(deltaTime)
 if spam == true and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
 end)
-pre7 = sim2:Connect(function()
+pre7 = sim2:Connect(function(deltaTime)
 if spam == true and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
 end)
-pre8 = sim2:Connect(function()
+pre8 = sim2:Connect(function(deltaTime)
 if spam == true and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
