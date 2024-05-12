@@ -215,7 +215,7 @@ local plyDirec = (playerPos - ballPos).Unit
 local ballDirec = realBall.Velocity.Unit
 local onPly = plyDirec:Dot(ballDirec)
 if targ ~= playerW then tg = true end
-if tg and onPly > 0 (distanceToBall <= requiredDistance) and
+if tg and onPly > 0 and (distanceToBall <= requiredDistance) and
 targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
