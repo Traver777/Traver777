@@ -26,8 +26,6 @@ local targ = nil
 local rootpart = nil
 local pre = nil
 local pre2 = nil
-local pre3 = nil
-local pre4 = nil
 local isClick = true
 local contador = 0
 local spam = false
@@ -275,40 +273,48 @@ pre2:Disconnect()
 end
 end)
 
-local intervalo = 1/240
-local ultimoTempo = DateTime.now()
+local intervalo = 1/120
+local ultimoTempo = os.clock()
+local spawn1, spawn2
 
 local function executarAcoes()
-local tempoAtual = DateTime.now()
-if (tempoAtual - ultimoTempo).TotalSeconds >= intervalo then
+while true do
+local tempoAtual = os.clock()
+if tempoAtual - ultimoTempo >= intervalo then
 newA()
 othrF()
 ultimoTempo = tempoAtual
 end
+wait()
+end
 end
 
 local function acaoPreRender()
-local tempoAtual = DateTime.now()
-if (tempoAtual - ultimoTempo).TotalSeconds >= intervalo then
+while true do
+local tempoAtual = os.clock()
+if tempoAtual - ultimoTempo >= intervalo then
 if spam == true and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
 ultimoTempo = tempoAtual
 end
+wait()
+end
 end
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-pre3 = run.Heartbeat:Connect(executarAcoes)
-pre4 = run.RenderStepped:Connect(acaoPreRender)
+spawn1 = spawn(executarAcoes)
+spawn2 = spawn(acaoPreRender)
 end
 end)
 
-
 ToggleZOFF.MouseButton1Click:Connect(function()
-if isClick == true then
-pre3:Disconnect()
-pre4:Disconnect()
+if isClick == true and spawn1 and spawn2 then
+coroutine.close(spawn1)
+coroutine.close(spawn2)
+spawn1 = nil
+spawn2 = nil
 end
 end)
 
