@@ -214,7 +214,7 @@ local safeDistance = 25 + (ballVelocity / 8)
 local projectedBallVelocity = ballVelocityVector:Dot(playerToBall.Unit)
 print("projectedBallVelocity:", projectedBallVelocity)
 if targ ~= playerW then tg = true end
-if projectedBallVelocity < 0 and tg and distanceToBall <= requiredDistance and targ == playerW then
+if projectedBallVelocity > 0 and tg and distanceToBall <= requiredDistance and targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
 end
