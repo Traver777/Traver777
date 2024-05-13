@@ -29,8 +29,6 @@ local isClick = true
 local contador = 0
 local spam = false
 local tg = true
-local cam = workspace.CurrentCamera
-local cf = workspace.CurrentCamera.CFrame
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n")
 print("sucesss run")
@@ -175,6 +173,8 @@ end
 
 local function argsA()
 if realPlayer and realPlayer.Parent then
+local cam = workspace.CurrentCamera
+local cf = workspace.CurrentCamera.CFrame
 local x, y, z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = cf:GetComponents()
 args = {
 [1] = 0.5,
