@@ -250,7 +250,7 @@ if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
-pre2 = run:Stepped:Connect(function()
+pre2 = run.Stepped:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
