@@ -267,18 +267,24 @@ local startTime2=tick()
 local isRunning=true
 
 local function executarAcoes()
-while isRunning and (tick() - startTime) >= 0.01 do
+while isRunning do
+if (tick() - startTime) >= 0.01 then
 newAll()
 startTime = tick()
+if isRunning == false then break end
+end
 end
 end
 
 local function acaoPreRender()
-while isRunning and (tick() - startTime2) >= 0.008 do then
+while isRunning do
+if (tick() - startTime2) >= 0.008 then
 if spam and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
 startTime2 = tick()
+if isRunning == false then break end
+end
 end
 end
 
