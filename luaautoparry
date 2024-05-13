@@ -29,6 +29,8 @@ local isClick = true
 local contador = 0
 local spam = false
 local tg = true
+local cam = workspace.CurrentCamera
+local cf = workspace.CurrentCamera.CFrame
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n")
 print("sucesss run")
@@ -173,8 +175,6 @@ end
 
 local function argsA()
 if realPlayer and realPlayer.Parent then
-local cam = workspace.CurrentCamera
-local cf = workspace.CurrentCamera.CFrame
 local x, y, z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = cf:GetComponents()
 args = {
 [1] = 0.5,
@@ -188,7 +188,6 @@ args = {
 }
 end
 end
-
 
 newBa()
 newPl()
@@ -265,12 +264,10 @@ end)
 
 local ser1=nil
 local ser2=nil
-local ser3=nil
 local intervalo1=1/120
-local intervalo2=1/800
+local intervalo2=1/240
 local tempoAnterior1=tick()
 local tempoAnterior2=tick()
-local tempoAnterior3=tick()
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick==true then
@@ -288,14 +285,6 @@ tempoAnterior2=tick()
 end
 end
 end)
-ser3=run.Heartbeat:Connect(function()
-if spam and realBall and realOther and realPlayer then
-if tick()-tempoAnterior3>=intervalo2 then
-parry:FireServer(unpack(args))
-tempoAnterior3=tick()
-end
-end
-end)
 end
 end)
 
@@ -303,7 +292,6 @@ ToggleZOFF.MouseButton1Click:Connect(function()
 if isClick == true then
 ser1:Disconnect()
 ser2:Disconnect()
-ser3:Disconnect()
 end
 end)
 
@@ -373,6 +361,16 @@ changeColors(Frame, buttons, blue, red, duration)
 wait(1)
 end
 end)
+
+coroutine.resume(coroutine.create(function()
+while task.wait(1) do
+if plr:GetNetworkPing()>500 and not pinglimit then
+pinglimit=true
+elseif plr:GetNetworkPing()<500 and pinglimit then
+pinglimit=false
+end
+end
+end))
 
 Frame.Active = true
 Frame.Draggable = true
