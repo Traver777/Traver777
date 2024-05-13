@@ -25,9 +25,12 @@ local realOther = nil
 local targ = nil
 local pre = nil
 local pre2 = nil
+local ser = nil
+local ser2 = nil
+local ser3 = nil
 local isClick = true
 local contador = 0
-local spam = false
+local spam = nil
 local tg = true
 local args
 local parry = game:GetService("SocialService"):WaitForChild("\n")
@@ -225,7 +228,7 @@ else
 contador = 0
 end
 else
-spam = false
+spam = nil
 contador = 0
 end
 end
@@ -247,7 +250,7 @@ if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
-pre2 = run.RenderStepped:Connect(function()
+pre2 = run:Stepped:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
@@ -262,48 +265,29 @@ pre2:Disconnect()
 end
 end)
 
-local startTime=tick()
-local startTime2=tick()
-local isRunning=true
-
-local function executarAcoes()
-while isRunning do
-if (tick() - startTime) >= 0.01 then
-newAll()
-startTime = tick()
-if isRunning == false then break end
-end
-end
-end
-
-local function acaoPreRender()
-while isRunning do
-if (tick() - startTime2) >= 0.008 then
-if spam and realBall and realOther and realPlayer then
+ToggleZ.MouseButton1Click:Connect(function()
+if isClick == true then
+ser = run.PostSimulation:Connect(newAll)
+ser2 = run.Heartbeat:Connect(function()
+if spam and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
-startTime2 = tick()
-if isRunning == false then break end
+end)
+ser3 = run.Stepped:Connect(function()
+if spam and realBall and realPlayer and realOther then
+parry:FireServer(unpack(args))
 end
+end)
 end
-end
+end)
 
-local function iniciarCorrotinas()
+ToggleZOFF.MouseButton1Click:Connect(function()
 if isClick == true then
-isRunning = true
-executarAcoes()
-acaoPreRender()
+ser:Disconnect()
+ser2:Disconnect()
+ser3:Disconnect()
 end
-end
-
-local function pararCorrotinas()
-if isClick == true then
-isRunning = false
-end
-end
-
-ToggleZ.MouseButton1Click:Connect(iniciarCorrotinas)
-ToggleZOFF.MouseButton1Click:Connect(pararCorrotinas)
+end)
 
 local dragging
 local dragStart
