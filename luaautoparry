@@ -264,34 +264,27 @@ end)
 
 local ser1=nil
 local ser2=nil
-local intervalo1=1/120
-local intervalo2=1/240
-local tempoAnterior1=tick()
-local tempoAnterior2=tick()
+local coroutineActive=false
 
 ToggleZ.MouseButton1Click:Connect(function()
-if isClick==true then
-ser1=run.Heartbeat:Connect(function()
-if tick()-tempoAnterior1>=intervalo1 then
-newAll()
-tempoAnterior1=tick()
-end
-end)
+if isClick==true and not coroutineActive then
+coroutineActive=true
+coroutine.resume(coroutine.create(function()
+ser1=run.Heartbeat:Connect(function()newAll()end)
 ser2=run.Heartbeat:Connect(function()
 if spam and realBall and realOther and realPlayer then
-if tick()-tempoAnterior2>=intervalo2 then
 parry:FireServer(unpack(args))
-tempoAnterior2=tick()
-end
 end
 end)
+end))
 end
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
-if isClick == true then
-ser1:Disconnect()
-ser2:Disconnect()
+if isClick==true and coroutineActive then
+if ser1 then ser1:Disconnect()end
+if ser2 then ser2:Disconnect()end
+coroutineActive=false
 end
 end)
 
@@ -364,9 +357,9 @@ end)
 
 coroutine.resume(coroutine.create(function()
 while task.wait(1) do
-if plr:GetNetworkPing()>500 and not pinglimit then
+if playerF:GetNetworkPing()>500 and not pinglimit then
 pinglimit=true
-elseif plr:GetNetworkPing()<500 and pinglimit then
+elseif playerF:GetNetworkPing()<500 and pinglimit then
 pinglimit=false
 end
 end
