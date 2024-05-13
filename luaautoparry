@@ -261,20 +261,31 @@ pre:Disconnect()
 pre2:Disconnect()
 end
 end)
+local startTime=os.clock()
+local isRunning=true
 
-local startTime = os.clock()
-local isRunning = false
-
+local function newAll()
+end
 local function executarAcoes()
-while isRunning and os.clock() - startTime < 0.005 do
+while isRunning do
+local currentTime=os.clock()
+if currentTime-startTime<0.005 then
 newAll()
+else
+break
+end
 end
 end
 
 local function acaoPreRender()
-while isRunning and os.clock() - startTime < 0.003 do
+while isRunning do
+local currentTime=os.clock()
+if currentTime-startTime<0.003 then
 if spam and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
+end
+else
+break
 end
 end
 end
@@ -282,8 +293,8 @@ end
 local function iniciarCorrotinas()
 if isClick == true then
 isRunning = true
-coroutine.wrap(executarAcoes)()
-coroutine.wrap(acaoPreRender)()
+executarAcoes()
+acaoPreRender()
 end
 end
 
