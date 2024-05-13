@@ -31,7 +31,7 @@ local contador = 0
 local spam = false
 local tg = true
 local args
-local parry = game:GetService("ReplicatedStorage").Remotes.ParryAttempt
+local parry = game:GetService("SocialService"):WaitForChild("\n")
 print("sucesss run")
 
 ScreenGui.Parent = game:GetService('CoreGui')
@@ -175,14 +175,18 @@ end
 
 local function argsA()
 if realPlayer and realPlayer.Parent then
-local rootCFrame = rootpart.CFrame
-local rootPos = rootCFrame.Position
-args = {
-1.5,
-rootCFrame * CFrame.new(0, 0, -50),
-{["5353535434"] = rootPos + Vector3.new(0, 0, -30)},
-{795.5, 152.5},
-false
+local cam = workspace.CurrentCamera
+local cf = workspace.CurrentCamera.CFrame
+local x, y, z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = cf:GetComponents()
+local args = {
+[1] = 0.5,
+[2] = CFrame.new(x,y,z,R00,R01,R02,R10,R11,R12,R20,R21,R22),
+[3] = {},
+[4] = {
+[1] = cam.ViewportSize.X/2,
+[2] = cam.ViewportSize.Y/2
+},
+[5] = false
 }
 end
 end
