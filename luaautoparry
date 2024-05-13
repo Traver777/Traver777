@@ -267,36 +267,56 @@ local targetRate2 = 1 / 240
 local lastTime = os.clock()
 local lastTime2 = os.clock()
 local coroutineActive = false
+local mainCoroutine = nil
+local secondaryCoroutine = nil
+
+local function stopCoroutines()
+    if mainCoroutine then
+        coroutineActive = false
+        coroutine.close(mainCoroutine)
+        mainCoroutine = nil
+    end
+    if secondaryCoroutine then
+        coroutine.close(secondaryCoroutine)
+        secondaryCoroutine = nil
+    end
+end
 
 ToggleZ.MouseButton1Click:Connect(function()
-if isClick and not coroutineActive then
-coroutineActive = true
-coroutine.resume(coroutine.create(function()
-while coroutineActive do
-local currentTime = os.clock()
-if currentTime - lastTime >= targetRate then
-newAll()
-lastTime = currentTime
-end
-end
-end))
-coroutine.resume(coroutine.create(function()
-while coroutineActive do
-local currentTime = os.clock()
-if currentTime - lastTime2 >= targetRate2 then
-if spam == true and realBall and realPlayer and realOther then
-parry:FireServer(unpack(args))
-end
-lastTime2 = currentTime
-end
-end
-end))
-end
+    if isClick == true and not coroutineActive then
+        coroutineActive = true
+        mainCoroutine = coroutine.create(function()
+            while coroutineActive do
+                local currentTime = os.clock()
+                if currentTime - lastTime >= targetRate then
+                    newAll()
+                    lastTime = currentTime
+                end
+                coroutine.yield()
+            end
+        end)
+        secondaryCoroutine = coroutine.create(function()
+            while coroutineActive do
+                local currentTime = os.clock()
+                if currentTime - lastTime2 >= targetRate2 then
+                    if spam == true and realBall and realPlayer and realOther then
+                        parry:FireServer(unpack(args))
+                    end
+                    lastTime2 = currentTime
+                end
+                coroutine.yield()
+            end
+        end)
+        coroutine.resume(mainCoroutine)
+        coroutine.resume(secondaryCoroutine)
+    else
+        stopCoroutines()
+    end
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
-if isClick and coroutineActive then
-coroutineActive = false
+if isClick == true then
+    stopCoroutines()
 end
 end)
 
