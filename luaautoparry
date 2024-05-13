@@ -262,29 +262,41 @@ pre2:Disconnect()
 end
 end)
 
-local ser1=nil
-local ser2=nil
-local coroutineActive=false
+local targetRate = 1 / 120
+local targetRate2 = 1 / 240
+local lastTime = os.clock()
+local lastTime2 = os.clock()
+local coroutineActive = false
 
 ToggleZ.MouseButton1Click:Connect(function()
-if isClick==true and not coroutineActive then
-coroutineActive=true
+if isClick and not coroutineActive then
+coroutineActive = true
 coroutine.resume(coroutine.create(function()
-ser1=run.PostSimulation:Connect(function()newAll()end)
-ser2=run.Heartbeat:Connect(function()
-if spam and realBall and realOther and realPlayer then
+while coroutineActive do
+local currentTime = os.clock()
+if currentTime - lastTime >= targetRate then
+newAll()
+lastTime = currentTime
+end
+end
+end))
+coroutine.resume(coroutine.create(function()
+while coroutineActive do
+local currentTime = os.clock()
+if currentTime - lastTime2 >= targetRate2 then
+if spam == true and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
-end)
+lastTime2 = currentTime
+end
+end
 end))
 end
 end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
-if isClick==true and coroutineActive then
-if ser1 then ser1:Disconnect()end
-if ser2 then ser2:Disconnect()end
-coroutineActive=false
+if isClick and coroutineActive then
+coroutineActive = false
 end
 end)
 
