@@ -266,13 +266,13 @@ local startTime = os.clock()
 local isRunning = false
 
 local function executarAcoes()
-while isRunning and os.clock - startTime < 0.005 do
+while isRunning and os.clock() - startTime < 0.005 do
 newAll()
 end
 end
 
 local function acaoPreRender()
-while isRunning and os.clock - startTime < 0.003 do
+while isRunning and os.clock() - startTime < 0.003 do
 if spam and realBall and realOther and realPlayer then
 parry:FireServer(unpack(args))
 end
