@@ -262,29 +262,26 @@ pre2:Disconnect()
 end
 end)
 
-local startTime=os.clock()
+local startTime=tick()
+local startTime2=tick()
 local isRunning=true
 
 local function executarAcoes()
 while isRunning do
-local currentTime=os.clock()
-if currentTime-startTime<0.005 then
+if tick() - startTime >= 0.005 then
+startTime = tick()
 newAll()
-else
-break
 end
 end
 end
 
 local function acaoPreRender()
 while isRunning do
-local currentTime=os.clock()
-if currentTime-startTime<0.003 then
+if tick() - startTime2 >= 0.003 then
 if spam and realBall and realOther and realPlayer then
+startTime2 = tick()
 parry:FireServer(unpack(args))
 end
-else
-break
 end
 end
 end
