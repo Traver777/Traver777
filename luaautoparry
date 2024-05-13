@@ -261,11 +261,10 @@ pre:Disconnect()
 pre2:Disconnect()
 end
 end)
+
 local startTime=os.clock()
 local isRunning=true
 
-local function newAll()
-end
 local function executarAcoes()
 while isRunning do
 local currentTime=os.clock()
