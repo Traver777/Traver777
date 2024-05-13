@@ -31,7 +31,7 @@ local contador = 0
 local spam = false
 local tg = true
 local args
-local parry = game:GetService("SocialService"):WaitForChild("\n\n\n\n\n\n\n\n")
+local parry = game:GetService("ReplicatedStorage").Remotes.ParryAttempt
 print("sucesss run")
 
 ScreenGui.Parent = game:GetService('CoreGui')
@@ -178,7 +178,7 @@ if realPlayer and realPlayer.Parent then
 local rootCFrame = rootpart.CFrame
 local rootPos = rootCFrame.Position
 args = {
-0.5,
+1.5,
 rootCFrame * CFrame.new(0, 0, -50),
 {["5353535434"] = rootPos + Vector3.new(0, 0, -30)},
 {795.5, 152.5},
@@ -265,20 +265,20 @@ local ser1=nil
 local ser2=nil
 local ser3=nil
 local intervalo1=1/120
-local intervalo2=1/720
+local intervalo2=1/800
 local tempoAnterior1=tick()
 local tempoAnterior2=tick()
 local tempoAnterior3=tick()
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick==true then
-ser1=run.Heartbeat:Connect(function()
+ser1=run.PostSimulation:Connect(function()
 if tick()-tempoAnterior1>=intervalo1 then
 newAll()
 tempoAnterior1=tick()
 end
 end)
-ser2=run.RenderStepped:Connect(function()
+ser2=run.PreRender:Connect(function()
 if spam and realBall and realOther and realPlayer then
 if tick()-tempoAnterior2>=intervalo2 then
 parry:FireServer(unpack(args))
