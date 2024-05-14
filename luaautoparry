@@ -238,8 +238,8 @@ local function newAll()
 newBa()
 newPl()
 newOt()
-argsA()
 checkNoMiss()
+argsA()
 end
 
 Toggle.MouseButton1Click:Connect(function()
@@ -249,7 +249,7 @@ if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
 end)
-pre2 = run.Stepped:Connect(function()
+pre2 = run.RenderStepped:Connect(function()
 if realPlayer and realPlayer.Parent then
 parry:FireServer(unpack(args))
 end
@@ -266,7 +266,7 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser = run.Heartbeat:Connect(newAll)
+ser = run.PostSimulation:Connect(newAll)
 ser2 = run.Heartbeat:Connect(function()
 if spam and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
