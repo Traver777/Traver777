@@ -27,7 +27,6 @@ local pre = nil
 local pre2 = nil
 local ser = nil
 local ser2 = nil
-local ser3 = nil
 local isClick = true
 local contador = 0
 local spam = nil
@@ -208,13 +207,12 @@ local opponentPos = realOther.HumanoidRootPart.Position
 local playerToBall = playerPos - ballPos
 local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 50)))) / (2 + (ballVelocity / (220 + ballVelocity / 10))))
+local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 40)))) / (2 + (ballVelocity / (200 + ballVelocity / 10))))
 local spamDistance = 30 + (ballVelocity / 9)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 8)
-local projectedBallVelocity = ballVelocityVector:Dot(playerToBall.Unit)
 if targ ~= playerW then tg = true end
-if projectedBallVelocity >= 0 and tg == true and distanceToBall <= requiredDistance and targ == playerW then
+if tg == true and distanceToBall <= requiredDistance and targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
 end
@@ -231,6 +229,7 @@ else
 spam = nil
 contador = 0
 end
+if distanceToBall >= spamDistanceLimit then spam = nil contador = 0 end
 end
 
 checkNoMiss()
@@ -267,13 +266,8 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser = run.PostSimulation:Connect(newAll)
+ser = run.Heartbeat:Connect(newAll)
 ser2 = run.Heartbeat:Connect(function()
-if spam and realBall and realPlayer and realOther then
-parry:FireServer(unpack(args))
-end
-end)
-ser3 = run.Stepped:Connect(function()
 if spam and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
@@ -285,7 +279,6 @@ ToggleZOFF.MouseButton1Click:Connect(function()
 if isClick == true then
 ser:Disconnect()
 ser2:Disconnect()
-ser3:Disconnect()
 end
 end)
 
