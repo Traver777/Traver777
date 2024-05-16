@@ -234,10 +234,6 @@ end
 
 checkNoMiss()
 
-local fixedFPS = 120
-local fixedDeltaTime = 1/fixedFPS
-local lastUpdateTime = 0
-
 local function newAll()
 newBa()
 newPl()
@@ -246,26 +242,16 @@ checkNoMiss()
 argsA()
 end
 
-local function fixedUpdate()
-if realPlayer and realPlayer.Parent then
-parry:FireServer(unpack(args))
-end
-end
-
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
 pre = run.RenderStepped:Connect(function()
-local currentTime = tick()
-if currentTime - lastUpdateTime >= fixedDeltaTime then
-fixedUpdate()
-lastUpdateTime = currentTime
+if realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
 end
 end)
 pre2 = run.RenderStepped:Connect(function()
-local currentTime = tick()
-if currentTime - lastUpdateTime >= fixedDeltaTime then
-fixedUpdate()
-lastUpdateTime = currentTime
+if realPlayer and realPlayer.Parent then
+parry:FireServer(unpack(args))
 end
 end)
 end
@@ -280,20 +266,10 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser = run.PostSimulation:Connect(function()
-local currentTime = tick()
-if currentTime - lastUpdateTime >= fixedDeltaTime then
-newAll()
-lastUpdateTime = currentTime
-end
-end)
+ser = run.PostSimulation:Connect(newAll)
 ser2 = run.Heartbeat:Connect(function()
-local currentTime = tick()
-if currentTime - lastUpdateTime >= fixedDeltaTime then
 if spam and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
-end
-lastUpdateTime = currentTime
 end
 end)
 end
