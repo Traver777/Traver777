@@ -211,7 +211,6 @@ local opponentDistance = (playerPos - opponentPos).Magnitude
 local ballDirection = (playerPos - realBall.Velocity).Unit
 local ballVelocityDirection = realBall.Velocity.Unit
 local isBallApproaching = ballVelocityDirection:Dot(ballDirection)
-print(isBallApproaching)
 local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 50)))) / 2)
 local spamDistance = 30 + (ballVelocity / 9)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
@@ -366,16 +365,6 @@ changeColors(Frame, buttons, blue, red, duration)
 wait(1)
 end
 end)
-
-coroutine.resume(coroutine.create(function()
-while task.wait(1) do
-if playerF:GetNetworkPing()>500 and not pinglimit then
-pinglimit=true
-elseif playerF:GetNetworkPing()<500 and pinglimit then
-pinglimit=false
-end
-end
-end))
 
 Frame.Active = true
 Frame.Draggable = true
