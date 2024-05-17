@@ -214,9 +214,8 @@ local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVeloc
 local spamDistance = 30 + (ballVelocity / 9)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 8)
-print(isBallApproaching)
 if targ ~= playerW then tg = true end
-if isBallApproaching >= 0 and tg == true and distanceToBall <= requiredDistance and targ == playerW then
+if isBallApproaching < 0 and tg == true and distanceToBall <= requiredDistance and targ == playerW then
 parry:FireServer(unpack(args))
 tg = false
 end
