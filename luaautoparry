@@ -198,7 +198,7 @@ newOt()
 argsA()
 
 local function checkNoMiss()
-    tg=not realBall or tg
+    if not realBall then tg = true end
     if not(realBall and realPlayer and realOther) then return end
     local ballVelocity=realBall.Velocity.Magnitude
     local playerPos=realPlayer.HumanoidRootPart.Position
@@ -212,8 +212,8 @@ local function checkNoMiss()
     local spamDistance=30+(ballVelocity/9)
     local spamDistanceLimit=35+(ballVelocity/10)
     local safeDistance=25+(ballVelocity/8)
-    tg=(targ~=playerW) or tg
-    if isBallApproaching>=0 and tg and distanceToBall<=requiredDistance and targ==playerW then
+    if targ~=playerW then tg = true end
+    if isBallApproaching>=0 and tg==true and distanceToBall<=requiredDistance and targ==playerW then
         parry:FireServer(unpack(args))
         tg=false
     end
