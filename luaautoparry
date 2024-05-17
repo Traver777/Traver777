@@ -25,9 +25,8 @@ local realOther = nil
 local targ = nil
 local pre = nil
 local pre2 = nil
-local ser1 = nil
+local ser = nil
 local ser2 = nil
-local ser3 = nil
 local isClick = true
 local contador = 0
 local spam = nil
@@ -198,41 +197,43 @@ newOt()
 argsA()
 
 local function checkNoMiss()
-    if not realBall then tg = true end
-    if not(realBall and realPlayer and realOther) then return end
-    local ballVelocity=realBall.Velocity.Magnitude
-    local playerPos=realPlayer.HumanoidRootPart.Position
-    local ballPos=realBall.Position
-    local opponentPos=realOther.HumanoidRootPart.Position
-    local distanceToBall=(playerPos-ballPos).Magnitude
-    local opponentDistance=(playerPos-opponentPos).Magnitude
-    local ballDirection=(ballPos-playerPos).Unit
-    local isBallApproaching=realBall.Velocity.Unit:Dot(ballDirection)
-    local requiredDistance=22+((ballVelocity-(distanceToBall/(5+(ballVelocity/50))))/2)
-    local spamDistance=30+(ballVelocity/9)
-    local spamDistanceLimit=35+(ballVelocity/10)
-    local safeDistance=25+(ballVelocity/8)
+if not realBall then tg = true end
+if not (realBall and realPlayer and realOther) then return end
+local ballVelocityVector = realBall.Velocity
+local ballVelocity = ballVelocityVector.Magnitude
+local playerPos = realPlayer.HumanoidRootPart.Position
+local ballPos = realBall.Position
+local opponentPos = realOther.HumanoidRootPart.Position
+local playerToBall = playerPos - ballPos
+local distanceToBall = playerToBall.Magnitude
+local opponentDistance = (playerPos - opponentPos).Magnitude
+local ballDirection = (ballPos - playerPos).Unit
+local ballVelocityDirection = realBall.Velocity.Unit
+local isBallApproaching = ballVelocityDirection:Dot(ballDirection)
+local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 50)))) / 2)
+local spamDistance = 30 + (ballVelocity / 9)
+local spamDistanceLimit = 35 + (ballVelocity / 10)
+local safeDistance = 25 + (ballVelocity / 8)
 print(isBallApproaching)
-    if targ~=playerW then tg = true end
-    if isBallApproaching>=0 and tg==true and distanceToBall<=requiredDistance and targ==playerW then
-        parry:FireServer(unpack(args))
-        tg=false
-    end
-    if distanceToBall<=spamDistance and opponentDistance<=safeDistance and distanceToBall<=spamDistanceLimit then
-        if targ==playerW then
-            contador=contador+1
-            spam=contador>=2
-        else
-            contador=0
-        end
-    else
-        spam=nil
-        contador=0
-    end
-    if distanceToBall>=spamDistanceLimit then
-        spam=nil
-        contador=0
-    end
+if targ ~= playerW then tg = true end
+if isBallApproaching >= 0 and tg == true and distanceToBall <= requiredDistance and targ == playerW then
+parry:FireServer(unpack(args))
+tg = false
+end
+if distanceToBall <= spamDistance and opponentDistance <= safeDistance and distanceToBall <= spamDistanceLimit then
+if targ == playerW then
+contador = contador + 1
+if contador >= 2 then
+spam = true
+end
+else
+contador = 0
+end
+else
+spam = nil
+contador = 0
+end
+if distanceToBall >= spamDistanceLimit then spam = nil contador = 0 end
 end
 
 checkNoMiss()
@@ -244,17 +245,6 @@ newOt()
 checkNoMiss()
 argsA()
 end
-
-newAll()
-
-local function newA()
-newBa()
-newPl()
-newOt()
-checkNoMiss()
-end
-
-newA()
 
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
@@ -280,9 +270,8 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.Heartbeat:Connect(newA)
-ser2 = run.PostSimulation:Connect(newAll)
-ser3 = run.Heartbeat:Connect(function()
+ser = run.PostSimulation:Connect(newAll)
+ser2 = run.Heartbeat:Connect(function()
 if spam and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
@@ -292,9 +281,8 @@ end)
 
 ToggleZOFF.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1:Disconnect()
+ser:Disconnect()
 ser2:Disconnect()
-ser3:Disconnect()
 end
 end)
 
