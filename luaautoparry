@@ -215,7 +215,6 @@ local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVeloc
 local spamDistance = 30 + (ballVelocity / 9)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 25 + (ballVelocity / 8)
-print(isBallApproaching)
 if targ ~= playerW then tg = true end
 if isBallApproaching >= 0 and tg == true and distanceToBall <= requiredDistance and targ == playerW then
 parry:FireServer(unpack(args))
@@ -247,12 +246,16 @@ checkNoMiss()
 argsA()
 end
 
+newAll()
+
 local function newA()
 newBa()
 newPl()
 newOt()
 checkNoMiss()
 end
+
+newA()
 
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
@@ -279,7 +282,7 @@ end)
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
 ser1 = run.Heartbeat:Connect(newAll)
-ser2 = run.PostSimulation:Connect(newA)
+ser2 = run.Heartbeat:Connect(newA)
 ser3 = run.Heartbeat:Connect(function()
 if spam and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
