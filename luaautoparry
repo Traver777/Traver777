@@ -209,10 +209,10 @@ local playerToBall = playerPos - ballPos
 local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
 divisor = 2 + (ballVelocity / 200)
-local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (4.5 + (ballVelocity / 40)))) / divisor)
-if divisor >= 2.7 and ballVelocity >= 140 then
-divisor = 2.7
-elseif ballVelocity < 140 then
+local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 40)))) / divisor)
+if divisor >= 2.6 and ballVelocity >= 120 then
+divisor = 2.6
+elseif ballVelocity < 120 then
 divisor = 2 + (ballVelocity / 200)
 end
 local spamDistance = 30 + (ballVelocity / 9)
