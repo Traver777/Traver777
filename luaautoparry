@@ -255,12 +255,12 @@ newAll()
 
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
-pre = run.RenderStepped:Connect(function()
+pre = run.PreRender:Connect(function()
 if realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
 end)
-pre2 = run.RenderStepped:Connect(function()
+pre2 = run.PreRender:Connect(function()
 if realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
