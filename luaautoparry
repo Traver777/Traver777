@@ -256,12 +256,12 @@ newAll()
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
 pre = run.RenderStepped:Connect(function()
-if realPlayer then
+if realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
 end)
 pre2 = run.RenderStepped:Connect(function()
-if realPlayer then
+if realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
 end)
@@ -278,7 +278,7 @@ end)
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
 ser1 = run.PostSimulation:Connect(newAll)
-ser2 = run.PreRender:Connect(function()
+ser2 = run.Heartbeat:Connect(function()
 if spam and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
