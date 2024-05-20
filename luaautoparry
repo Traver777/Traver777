@@ -277,8 +277,8 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.PostSimulation:Connect(newAll)
-ser2 = run.Heartbeat:Connect(function()
+ser1 = run.Heartbeat:Connect(newAll)
+ser2 = run.PreRender:Connect(function()
 if spam and realBall and realPlayer and realOther then
 parry:FireServer(unpack(args))
 end
