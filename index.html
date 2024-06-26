@@ -1,47 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Website de Notícias</title>
-    <style>
-        .newspost {
-            border: 2px solid black;
-            margin: 20px;
-            padding: 20px;
-            width: 70%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-
-    <h1>Website de Notícias - Painel Administrativo</h1>
-
-    <div id="newsPanel">
-
-    </div>
-
-    <div>
-        <input id="newsTitle" type="text" placeholder="Título da Notícia" />
-        <textarea id="newsContent" placeholder="Conteúdo da Notícia"></textarea>
-        <button onclick="postNews()">Postar Notícia</button>
-    </div>
+    IPV6 = <span id="ip"></span>
+    <br>
+    ISP = <span id="isp"></span>
+    <br>
+    País = <span id="country"></span>
+    <br>
+    Região = <span id="region"></span>
+    <br>
+    Cidade = <span id="city"></span>
 
     <script>
-        function postNews() {
-            var title = document.getElementById("newsTitle").value;
-            var content = document.getElementById("newsContent").value;
+        $(document).ready(function() {
+            $.getJSON('https://ipapi.co/json', function(data) {
+                $('#ip').text(data.ip);
+                $('#isp').text(data.org);
+                $('#country').text(data.country_name);
+                $('#region').text(data.region);
+                $('#city').text(data.city);
 
-            var newPost = document.createElement("div");
-            newPost.className = "newspost";
-            newPost.innerHTML = "<h2>" + title + "</h2>" + "<p>" + content + "</p>";
-
-            var panel = document.getElementById("newsPanel")
-            panel.prepend(newPost);
-
-            document.getElementById("newsTitle").value = '';
-            document.getElementById("newsContent").value = '';
-        }
+                // Verificação do endereço IPv6
+                if (data.ip === "2804:2688:7114:4900:c135:ef80:181e:e93b") {
+                    alert("Informações para o endereço IPv6 especificado:\n" +
+                        "IP: " + data.ip + "\n" +
+                        "ISP: " + data.org + "\n" +
+                        "País: " + data.country_name + "\n" +
+                        "Região: " + data.region + "\n" +
+                        "Cidade: " + data.city);
+                }
+            });
+        });
     </script>
 </body>
 </html>
