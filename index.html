@@ -1,46 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Carregue o jQuery ou use JavaScript puro -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-    IPV6 = <span id="ip"></span>
-    <br>
-    ISP = <span id="isp"></span>
-    <br>
-    País = <span id="country"></span>
-    <br>
-    Região = <span id="region"></span>
-    <br>
+    IPV6 = <span id="ip"></span><br>
+    ISP = <span id="isp"></span><br>
+    País = <span id="country"></span><br>
+    Região = <span id="region"></span><br>
     Cidade = <span id="city"></span>
 
     <script>
         $(document).ready(function() {
-            $.getJSON('https://ipapi.co/json', function(data) {
-                // Salva as informações no localStorage
-                localStorage.setItem('ip', data.ip);
-                localStorage.setItem('isp', data.org);
-                localStorage.setItem('country', data.country_name);
-                localStorage.setItem('region', data.region);
-                localStorage.setItem('city', data.city);
+            function exibirInformacoes(data) {
+                const { ip, org, country_name, region, city } = data;
+                localStorage.setItem('ip', ip);
+                localStorage.setItem('isp', org);
+                localStorage.setItem('country', country_name);
+                localStorage.setItem('region', region);
+                localStorage.setItem('city', city);
 
-                // Exibe as informações recuperadas do localStorage
-                $('#ip').text(localStorage.getItem('ip'));
-                $('#isp').text(localStorage.getItem('isp'));
-                $('#country').text(localStorage.getItem('country'));
-                $('#region').text(localStorage.getItem('region'));
-                $('#city').text(localStorage.getItem('city'));
+                $('#ip').text(ip);
+                $('#isp').text(org);
+                $('#country').text(country_name);
+                $('#region').text(region);
+                $('#city').text(city);
 
-                // Verificação do endereço IPv6
-                if (data.ip === "2804:2688:7114:4900:9a64:5de6:a111:5c49") {
-                    alert("Informações para o endereço IPv6 especificado:\n" +
-                        "IP: " + data.ip + "\n" +
-                        "ISP: " + data.org + "\n" +
-                        "País: " + data.country_name + "\n" +
-                        "Região: " + data.region + "\n" +
-                        "Cidade: " + data.city);
+                if (ip === "2804:2688:7114:4900:9a64:5de6:a111:5c49") {
+                    alert(`Informações para o endereço IPv6 especificado:
+                        IP: ${ip}
+                        ISP: ${org}
+                        País: ${country_name}
+                        Região: ${region}
+                        Cidade: ${city}`);
                 }
-            });
+            }
+
+            function obterInformacoes() {
+                $.getJSON('https://ipapi.co/json', exibirInformacoes);
+            }
+
+            // Chama a função inicialmente
+            obterInformacoes();
+
+            // Define um intervalo para atualizar as informações a cada 5 minutos (300000 ms)
+            setInterval(obterInformacoes, 10000);
         });
     </script>
 </body>
