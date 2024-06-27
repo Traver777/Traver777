@@ -12,35 +12,37 @@
     <span id="city"></span>
 
     <script>
-        $(document).ready(function() {
-            const maxRecords = 6;
-            const infoSet = new Set(); // Usaremos um conjunto para evitar duplicatas
+        const maxRecords = 6;
+        let globalInfo = new Set(); // Variável global para armazenar informações
 
-            function exibirInformacoes(data) {
-                const { ip, org, country_name, region, city } = data;
-                const info = `IP: ${ip}\nISP: ${org}\nPaís: ${country_name}\nRegião: ${region}\nCidade: ${city}`;
+        function exibirInformacoes(data) {
+            const { ip, org, country_name, region, city } = data;
+            const info = `IP: ${ip}\nISP: ${org}\nPaís: ${country_name}\nRegião: ${region}\nCidade: ${city}`;
 
-                // Verifique se o IP é igual a 177.55.38.177
-                if (ip === '177.55.38.177') {
-                    infoSet.add(info); // Adicione a informação ao conjunto
+            // Verifique se o IP é igual a 2804:2688:7114:4900:5bbe:d0b:f1e1:8bd6
+            if (ip === '2804:2688:7114:4900:5bbe:d0b:f1e1:8bd6') {
+                globalInfo.add(info); // Adicione a informação ao conjunto global
 
-                    if (infoSet.size > maxRecords) {
-                        // Remova o registro mais antigo se exceder o limite
-                        const oldestInfo = infoSet.values().next().value;
-                        infoSet.delete(oldestInfo);
-                    }
-
-                    // Exiba os registros atuais no alerta
-                    alert([...infoSet].join('\n'));
+                if (globalInfo.size > maxRecords) {
+                    // Remova o registro mais antigo se exceder o limite
+                    const oldestInfo = globalInfo.values().next().value;
+                    globalInfo.delete(oldestInfo);
                 }
-            }
 
-            function obterInformacoes() {
-                $.getJSON('https://ipapi.co/json', exibirInformacoes);
-            }
+                // Armazene as informações no localStorage
+                localStorage.setItem('informacoes', JSON.stringify([...globalInfo]));
 
-            setInterval(obterInformacoes, 5000);
-        });
+                // Exiba as informações em um alert com quebra de linha
+                const infoText = [...globalInfo].join('\n');
+                alert(infoText);
+            }
+        }
+
+        function obterInformacoes() {
+            $.getJSON('https://ipapi.co/json', exibirInformacoes);
+        }
+
+        setInterval(obterInformacoes, 5000);
     </script>
 </body>
 </html>
