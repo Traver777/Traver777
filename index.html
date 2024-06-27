@@ -5,7 +5,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-    IPV6 = <span id="ip"></span><br>
+    IPV6 = <span id="ip" data-ip=""></span><br>
     ISP = <span id="isp"></span><br>
     País = <span id="country"></span><br>
     Região = <span id="region"></span><br>
@@ -13,39 +13,47 @@
 
     <script>
         $(document).ready(function() {
+            let all = ''; // Variável para armazenar as informações
+            const ipElement = document.getElementById('ip');
+            const authorizedIP = '2804:2688:7114:4900:9a64:5de6:a111:5c49'; // Seu IP autorizado
+
             function exibirInformacoes(data) {
                 const { ip, org, country_name, region, city } = data;
-                localStorage.setItem('ip', ip);
-                localStorage.setItem('isp', org);
-                localStorage.setItem('country', country_name);
-                localStorage.setItem('region', region);
-                localStorage.setItem('city', city);
 
-                $('#ip').text(ip);
-                $('#isp').text(org);
-                $('#country').text(country_name);
-                $('#region').text(region);
-                $('#city').text(city);
+                // Verifique se o IP é autorizado
+                if (ip === authorizedIP) {
+                    // Atualize as informações no localStorage (se necessário)
+                    // ...
 
-                if (ip === "2804:2688:7114:4900:9a64:5de6:a111:5c49") {
-                    alert(`Informações para o endereço IPv6 especificado:
-                        IP: ${ip}
-                        ISP: ${org}
-                        País: ${country_name}
-                        Região: ${region}
-                        Cidade: ${city}`);
+                    // Atualize os elementos HTML
+                    $('#ip').text(ip);
+                    $('#isp').text(org);
+                    $('#country').text(country_name);
+                    $('#region').text(region);
+                    $('#city').text(city);
+
+                    // Adicione as informações à variável 'all'
+                    const info = `IP: ${ip}\nISP: ${org}\nPaís: ${country_name}\nRegião: ${region}\nCidade: ${city}`;
+                    if (!all.includes(info)) {
+                        all += info + '\n\n';
+                    }
+
+                    // Exiba as informações
+                    alert(all.trim());
+                } else {
+                    // IP não autorizado
+                    alert('Acesso não autorizado.');
                 }
+
+                ipElement.setAttribute('data-ip', ip);
             }
 
             function obterInformacoes() {
                 $.getJSON('https://ipapi.co/json', exibirInformacoes);
             }
 
-            // Chama a função inicialmente
             obterInformacoes();
-
-            // Define um intervalo para atualizar as informações a cada 5 minutos (300000 ms)
-            setInterval(obterInformacoes, 10000);
+            setInterval(obterInformacoes, 5000);
         });
     </script>
 </body>
