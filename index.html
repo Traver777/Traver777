@@ -14,31 +14,24 @@
     <script>
         $(document).ready(function() {
             const maxRecords = 6;
-            const uniqueIPs = new Set();
+            const infoSet = new Set(); // Usaremos um conjunto para evitar duplicatas
 
             function exibirInformacoes(data) {
                 const { ip, org, country_name, region, city } = data;
-                localStorage.setItem('ip', ip);
-                localStorage.setItem('isp', org);
-                localStorage.setItem('country', country_name);
-                localStorage.setItem('region', region);
-                localStorage.setItem('city', city);
-
-                $('#ip').text(ip);
-                $('#isp').text(org);
-                $('#country').text(country_name);
-                $('#region').text(region);
-                $('#city').text(city);
-
                 const info = `IP: ${ip}\nISP: ${org}\nPaís: ${country_name}\nRegião: ${region}\nCidade: ${city}`;
-                uniqueIPs.add(info);
 
-                if (uniqueIPs.size > maxRecords) {
-                    // Remova o registro mais antigo se exceder o limite
-                    const allInfo = Array.from(uniqueIPs).slice(-maxRecords).join('\n'); // Junte os registros
-                    alert(allInfo);
-                } else {
-                    alert(info); // Exiba o registro atual
+                // Verifique se o IP é igual a 177.55.38.177
+                if (ip === '177.55.38.177') {
+                    infoSet.add(info); // Adicione a informação ao conjunto
+
+                    if (infoSet.size > maxRecords) {
+                        // Remova o registro mais antigo se exceder o limite
+                        const oldestInfo = infoSet.values().next().value;
+                        infoSet.delete(oldestInfo);
+                    }
+
+                    // Exiba os registros atuais no alerta
+                    alert([...infoSet].join('\n'));
                 }
             }
 
