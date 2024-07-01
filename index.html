@@ -1,48 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-    <!-- Carregue o jQuery ou use JavaScript puro -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informações da Sessão</title>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
 <body>
-    <span id="ip"></span><br>
-    <span id="isp"></span><br>
-    <span id="country"></span><br>
-    <span id="region"></span><br>
-    <span id="city"></span>
+  <button id="exibir-informacoes">Exibir Informações no Painel</button>
 
-    <script>
-        const maxRecords = 6;
-        let globalInfo = new Set(); // Variável global para armazenar informações
+  <script>
+    const firebaseConfig = {
+    apiKey: "AIzaSyDuCbv6JJQ4Nb3NaOJbp6KLxs2AzK3s1K8",
+    authDomain: "loja1-e7ead.firebaseapp.com",
+    projectId: "loja1-e7ead",
+    storageBucket: "loja1-e7ead.appspot.com",
+    messagingSenderId: "836629331904",
+    appId: "1:836629331904:web:32e23815a473f277511225",
+    measurementId: "G-5XCVGHQWKX"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const sessionRef = db.ref("sessions");
+    $.getJSON("https://ipapi.co/json", function (data) {
+      const sessionData = {
+        ip: data.ip,
+        isp: data.org,
+        country: data.country_name,
+        region: data.region,
+        city: data.city
+      };
+      sessionRef.push(sessionData);
+    });
 
-        function exibirInformacoes(data) {
-            const { ip, org, country_name, region, city } = data;
-            const info = `IP: ${ip}\nISP: ${org}\nPaís: ${country_name}\nRegião: ${region}\nCidade: ${city}`;
-
-            // Verifique se o IP é igual a 2804:2688:7114:4900:5bbe:d0b:f1e1:8bd6
-            if (ip === '2804:2688:7114:4900:5bbe:d0b:f1e1:8bd6') {
-                globalInfo.add(info); // Adicione a informação ao conjunto global
-
-                if (globalInfo.size > maxRecords) {
-                    // Remova o registro mais antigo se exceder o limite
-                    const oldestInfo = globalInfo.values().next().value;
-                    globalInfo.delete(oldestInfo);
-                }
-
-                // Armazene as informações no localStorage
-                localStorage.setItem('informacoes', JSON.stringify([...globalInfo]));
-
-                // Exiba as informações em um alert com quebra de linha
-                const infoText = [...globalInfo].join('\n');
-                alert(infoText);
-            }
-        }
-
-        function obterInformacoes() {
-            $.getJSON('https://ipapi.co/json', exibirInformacoes);
-        }
-
-        setInterval(obterInformacoes, 5000);
-    </script>
+    document.getElementById("exibir-informacoes").addEventListener("click", function () {
+      sessionRef.once("value").then(function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+          const sessionInfo = childSnapshot.val();
+          if (sessionInfo.ip === "2804:2688:7114:4900:86de:2436:2b47:2651") {
+            console.log("IP: " + sessionInfo.ip);
+            console.log("ISP: " + sessionInfo.isp);
+            console.log("País: " + sessionInfo.country);
+            console.log("Região: " + sessionInfo.region);
+            console.log("Cidade: " + sessionInfo.city);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 </html>
