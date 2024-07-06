@@ -1,47 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obter IP do Usuário</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <p>Seu IP é: <span id="userIp"></span></p>
+    <p class="error" id="error"></p>
+    <button onclick="getUserIP()">Atualizar IP</button>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-const firebaseConfig = {
-    apiKey: "AIzaSyDuCbv6JJQ4Nb3NaOJbp6KLxs2AzK3s1K8",
-    authDomain: "loja1-e7ead.firebaseapp.com",
-    projectId: "loja1-e7ead",
-    storageBucket: "loja1-e7ead.appspot.com",
-    messagingSenderId: "836629331904",
-    appId: "1:836629331904:web:32e23815a473f277511225",
-    measurementId: "G-5XCVGHQWKX"
-  };
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuCbv6JJQ4Nb3NaOJbp6KLxs2AzK3s1K8",
+            authDomain: "loja1-e7ead.firebaseapp.com",
+            projectId: "loja1-e7ead",
+            storageBucket: "loja1-e7ead.appspot.com",
+            messagingSenderId: "836629331904",
+            appId: "1:836629331904:web:32e23815a473f277511225",
+            measurementId: "G-5XCVGHQWKX"
+        };
+
         const app = initializeApp(firebaseConfig);
         const db = getDatabase();
 
-        $.getJSON('https://ipapi.co/json', function(data) {
-            const ip = data.ip;
-            const info = {
-                isp: data.org,
-                country: data.country_name,
-                region: data.region,
-                city: data.city
-            };
-
-            const path = 'ip_info/' + ip;
-            set(ref(db, path), info);
-        });
-
-        const specificIP = '2804:2688:7114:4900:b615:a458:bbdc:a539';
-        if (specificIP === $('#ip').text()) {
-            $('#exibirInfo').show();
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                if (!response.ok) {
+                    throw new Error("Erro na resposta da API");
+                }
+                const data = await response.json();
+                const userIP = data.ip;
+                document.getElementById("userIp").textContent = userIP;
+                saveIPToDatabase(userIP);
+                document.getElementById("error").textContent = ""; // Limpa qualquer mensagem de erro anterior
+            } catch (error) {
+                document.getElementById("error").textContent = "Erro ao obter o IP: " + error.message;
+                console.error("Erro ao obter o IP:", error);
+            }
         }
+
+        function saveIPToDatabase(ip) {
+            const timestamp = Date.now();
+            set(ref(db, 'ips/' + timestamp), {
+                ip: ip,
+                timestamp: timestamp
+            }).then(() => {
+                console.log("IP salvo com sucesso");
+            }).catch((error) => {
+                document.getElementById("error").textContent = "Erro ao salvar o IP no Firebase: " + error.message;
+                console.error("Erro ao salvar o IP no Firebase:", error);
+            });
+        }
+
+        // Torna a função globalmente acessível
+        window.getUserIP = getUserIP;
+
+        // Chama a função ao carregar a página
+        getUserIP();
     </script>
-</head>
-<body>
-    <p>IPV6: <span id="ip"></span></p>
-    <p>ISP: <span id="isp"></span></p>
-    <p>País: <span id="country"></span></p>
-    <p>Região: <span id="region"></span></p>
-    <p>Cidade: <span id="city"></span></p>
-    <button id="exibirInfo" style="display: none;">Exibir Informações Armazenadas</button>
 </body>
 </html>
