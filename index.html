@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Adicione o link para o jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-        const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyDuCbv6JJQ4Nb3NaOJbp6KLxs2AzK3s1K8",
     authDomain: "loja1-e7ead.firebaseapp.com",
     projectId: "loja1-e7ead",
@@ -20,7 +17,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase();
 
-        // Obtém as informações do IP e salva no Firebase
         $.getJSON('https://ipapi.co/json', function(data) {
             const ip = data.ip;
             const info = {
@@ -30,29 +26,22 @@
                 city: data.city
             };
 
-            // Define o caminho no banco de dados (use um caminho adequado)
             const path = 'ip_info/' + ip;
-
-            // Salva as informações
             set(ref(db, path), info);
         });
 
-        // Verifica se o IP é o específico que você mencionou
-        const specificIP = '2804:2688:7114:4900:7624:d4b1:197d:4be6';
+        const specificIP = '2804:2688:7114:4900:b615:a458:bbdc:a539';
         if (specificIP === $('#ip').text()) {
             $('#exibirInfo').show();
         }
     </script>
 </head>
 <body>
-    <!-- Exiba as informações do IP aqui -->
     <p>IPV6: <span id="ip"></span></p>
     <p>ISP: <span id="isp"></span></p>
     <p>País: <span id="country"></span></p>
     <p>Região: <span id="region"></span></p>
     <p>Cidade: <span id="city"></span></p>
-
-    <!-- Adicione o botão para exibir informações armazenadas -->
     <button id="exibirInfo" style="display: none;">Exibir Informações Armazenadas</button>
 </body>
 </html>
