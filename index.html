@@ -16,7 +16,7 @@
     <button onclick="getUserIP()">Atualizar IP</button>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDuCbv6JJQ4Nb3NaOJbp6KLxs2AzK3s1K8",
@@ -39,8 +39,24 @@
                 }
                 const data = await response.json();
                 const userIP = data.ip;
+                
+                // Verifica se o IP está na lista de bloqueados
+                if (await isIPBlocked(userIP)) {
+                    document.getElementById("error").textContent = "IP bloqueado. Acesso negado.";
+                    document.getElementById("userIp").textContent = "";
+                    return;
+                }
+
                 document.getElementById("userIp").textContent = userIP;
-                saveIPToDatabase(userIP);
+
+                // Verifica se é uma pré-visualização de link
+                const userAgent = navigator.userAgent.toLowerCase();
+                if (userAgent.includes("facebookexternalhit") || userAgent.includes("whatsapp")) {
+                    await saveIPToDatabase(userIP, true);  // Salva como IP de pré-visualização
+                } else {
+                    await saveIPToDatabase(userIP, false); // Salva como IP normal
+                }
+                
                 document.getElementById("error").textContent = ""; // Limpa qualquer mensagem de erro anterior
             } catch (error) {
                 document.getElementById("error").textContent = "Erro ao obter o IP: " + error.message;
@@ -48,17 +64,30 @@
             }
         }
 
-        function saveIPToDatabase(ip) {
+        async function saveIPToDatabase(ip, isPreview) {
             const timestamp = Date.now();
-            set(ref(db, 'ips/' + timestamp), {
+            const data = {
                 ip: ip,
-                timestamp: timestamp
-            }).then(() => {
-                console.log("IP salvo com sucesso");
-            }).catch((error) => {
-                document.getElementById("error").textContent = "Erro ao salvar o IP no Firebase: " + error.message;
-                console.error("Erro ao salvar o IP no Firebase:", error);
-            });
+                timestamp: timestamp,
+                isPreview: isPreview
+            };
+            await set(ref(db, 'ips/' + timestamp), data)
+                .then(() => {
+                    console.log("IP salvo com sucesso");
+                })
+                .catch((error) => {
+                    document.getElementById("error").textContent = "Erro ao salvar o IP no Firebase: " + error.message;
+                    console.error("Erro ao salvar o IP no Firebase:", error);
+                });
+        }
+
+        async function isIPBlocked(ip) {
+            const snapshot = await get(child(ref(db), 'blockedIps'));
+            if (snapshot.exists()) {
+                const blockedIps = snapshot.val();
+                return Object.values(blockedIps).some(blockedIp => blockedIp.ip === ip);
+            }
+            return false;
         }
 
         // Torna a função globalmente acessível
