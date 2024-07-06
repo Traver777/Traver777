@@ -1,370 +1,71 @@
-local players = game.Players
-local playerF = players.LocalPlayer
-local playerW = playerF.Name
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obter IP do Usuário</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <p>Seu IP é: <span id="userIp"></span></p>
+    <p class="error" id="error"></p>
+    <button onclick="getUserIP()">Atualizar IP</button>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-game:GetService("ReplicatedStorage").Security.RemoteEvent:Destroy() game:GetService("ReplicatedStorage").Security[""]:Destroy()
-game:GetService("ReplicatedStorage").Security:Destroy() game:GetService("Players").LocalPlayer.PlayerScripts.Client.DeviceChecker:Destroy()
+        const firebaseConfig = {
+            apiKey: "AIzaSyDuCbv6JJQ4Nb3NaOJbp6KLxs2AzK3s1K8",
+            authDomain: "loja1-e7ead.firebaseapp.com",
+            projectId: "loja1-e7ead",
+            storageBucket: "loja1-e7ead.appspot.com",
+            messagingSenderId: "836629331904",
+            appId: "1:836629331904:web:32e23815a473f277511225",
+            measurementId: "G-5XCVGHQWKX"
+        };
 
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local uiCorner = Instance.new("UICorner")
-local uiCorner2 = Instance.new("UICorner")
-local uiCorner3 = Instance.new("UICorner")
-local uiCorner4 = Instance.new("UICorner")
-local uiCorner5 = Instance.new("UICorner")
-local Toggle = Instance.new("TextButton")
-local ToggleOFF = Instance.new("TextButton")
-local ToggleZ = Instance.new("TextButton")
-local ToggleZOFF = Instance.new("TextButton")
-local aliveFolder = workspace:WaitForChild("Alive")
-local ballsFolder = workspace:WaitForChild("Balls")
-local run = game:GetService("RunService")
-local realBall = nil
-local realPlayer = nil
-local realOther = nil
-local targ = nil
-local pre = nil
-local pre2 = nil
-local ser1 = nil
-local ser2 = nil
-local ser3 = nil
-local isClick = true
-local contador = 0
-local spam = nil
-local tg = true
-local args
-local parry = game:GetService("SocialService"):WaitForChild("\n")
-print("sucesss run")
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
 
-ScreenGui.Parent = game:GetService('CoreGui')
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        async function getUserIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                if (!response.ok) {
+                    throw new Error("Erro na resposta da API");
+                }
+                const data = await response.json();
+                const userIP = data.ip;
+                document.getElementById("userIp").textContent = userIP;
+                saveIPToDatabase(userIP);
+                document.getElementById("error").textContent = ""; // Limpa qualquer mensagem de erro anterior
+            } catch (error) {
+                document.getElementById("error").textContent = "Erro ao obter o IP: " + error.message;
+                console.error("Erro ao obter o IP:", error);
+            }
+        }
 
-Frame = Instance.new("Frame")
-Frame.Parent = ScreenGui
-Frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
-Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.2012012, 0, 0.343128483, 0)
-Frame.Size = UDim2.new(0, 115, 0, 85)
-uiCorner.CornerRadius = UDim.new(0, 8)
-uiCorner.Parent = Frame
+        function saveIPToDatabase(ip) {
+            const timestamp = Date.now();
+            set(ref(db, 'ips/' + timestamp), {
+                ip: ip,
+                timestamp: timestamp
+            }).then(() => {
+                console.log("IP salvo com sucesso");
+            }).catch((error) => {
+                document.getElementById("error").textContent = "Erro ao salvar o IP no Firebase: " + error.message;
+                console.error("Erro ao salvar o IP no Firebase:", error);
+            });
+        }
 
+        // Torna a função globalmente acessível
+        window.getUserIP = getUserIP;
 
-Toggle.Name = "Toggle"
-Toggle.Parent = Frame
-Toggle.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Toggle.BorderSizePixel = 0
-Toggle.Position = UDim2.new(0.067012012, 0, 0.5103128483, 0)
-Toggle.Size = UDim2.new(0, 100, 0, 35)
-Toggle.Visible = true
-Toggle.Font = Enum.Font.Bodoni
-Toggle.Text = "spam"
-Toggle.TextColor3 = Color3.fromRGB(0, 0, 0)
-Toggle.TextSize = 33.000
-Toggle.TextWrapped = true
-uiCorner2.CornerRadius = UDim.new(0, 5)
-uiCorner2.Parent = Toggle
-Toggle.MouseButton1Click:Connect(function()
-if isClick == true then
-Toggle.Visible = false
-ToggleOFF.Visible = true
-end
-end)
-
-ToggleOFF.Name = "ToggleOFF"
-ToggleOFF.Parent = Frame
-ToggleOFF.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-ToggleOFF.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ToggleOFF.BorderSizePixel = 0
-ToggleOFF.Position = UDim2.new(0.067012012, 0, 0.5103128483, 0)
-ToggleOFF.Size = UDim2.new(0, 100, 0, 35)
-ToggleOFF.Visible = false
-ToggleOFF.Font = Enum.Font.Bodoni
-ToggleOFF.Text = "unspam"
-ToggleOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
-ToggleOFF.TextSize = 33.000
-ToggleOFF.TextWrapped = true
-uiCorner3.CornerRadius = UDim.new(0, 5)
-uiCorner3.Parent = ToggleOFF
-ToggleOFF.MouseButton1Click:Connect(function()
-if isClick == true then
-ToggleOFF.Visible = false
-Toggle.Visible = true
-end
-end)
-
-ToggleZ.Name = "Toggle"
-ToggleZ.Parent = Frame
-ToggleZ.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-ToggleZ.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ToggleZ.BorderSizePixel = 0
-ToggleZ.Position = UDim2.new(0.067012012, 0, 0.053128483, 0)
-ToggleZ.Size = UDim2.new(0, 100, 0, 35)
-ToggleZ.Visible = true
-ToggleZ.Font = Enum.Font.Bodoni
-ToggleZ.Text = "parry"
-ToggleZ.TextColor3 = Color3.fromRGB(0, 0, 0)
-ToggleZ.TextSize = 33.000
-ToggleZ.TextWrapped = true
-uiCorner4.CornerRadius = UDim.new(0, 5)
-uiCorner4.Parent = ToggleZ
-ToggleZ.MouseButton1Click:Connect(function()
-if isClick == true then
-ToggleZ.Visible = false
-ToggleZOFF.Visible = true
-end
-end)
-
-ToggleZOFF.Name = "ToggleOFF"
-ToggleZOFF.Parent = Frame
-ToggleZOFF.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-ToggleZOFF.BorderColor3 = Color3.fromRGB(0, 0, 0)
-ToggleZOFF.BorderSizePixel = 0
-ToggleZOFF.Position = UDim2.new(0.067012012, 0, 0.053128483, 0)
-ToggleZOFF.Size = UDim2.new(0, 100, 0, 35)
-ToggleZOFF.Visible = false
-ToggleZOFF.Font = Enum.Font.Bodoni
-ToggleZOFF.Text = "unparry"
-ToggleZOFF.TextColor3 = Color3.fromRGB(0, 0, 0)
-ToggleZOFF.TextSize = 33.000
-ToggleZOFF.TextWrapped = true
-uiCorner5.CornerRadius = UDim.new(0, 5)
-uiCorner5.Parent = ToggleZOFF
-ToggleZOFF.MouseButton1Click:Connect(function()
-if isClick == true then
-ToggleZOFF.Visible = false
-ToggleZ.Visible = true
-end
-end)
-
-local function newBa()
-local balls = ballsFolder:GetChildren()
-realBall = nil
-for _, ball in ipairs(balls) do
-if ball:GetAttribute("realBall") == true then
-realBall = ball
-targ = realBall:GetAttribute("target")
-break
-end
-end
-end
-
-local function newPl()
-local alive = aliveFolder:GetChildren()
-realPlayer = nil
-for _, ply in ipairs(alive) do
-if ply.Name == playerW then
-realPlayer = ply
-break
-end
-end
-end
-
-local function newOt()
-local alive = aliveFolder:GetChildren()
-realOther = nil
-local others = {}
-for _, other in pairs(alive) do
-if other.Name ~= playerW then
-table.insert(others,other)
-realOther = other
-break
-end
-end
-end
-
-local function argsA()
-if realPlayer and realPlayer.Parent then
-local cam = workspace.CurrentCamera
-local cf = workspace.CurrentCamera.CFrame
-local x, y, z, R00, R01, R02, R10, R11, R12, R20, R21, R22 = cf:GetComponents()
-args = {
-[1] = 0.5,
-[2] = CFrame.new(x,y,z,R00,R01,R02,R10,R11,R12,R20,R21,R22),
-[3] = {},
-[4] = {
-[1] = cam.ViewportSize.X/2,
-[2] = cam.ViewportSize.Y/2
-},
-[5] = false
-}
-end
-end
-
-newBa()
-newPl()
-newOt()
-argsA()
-
-local divisor
-
-local function checkNoMiss()
-if not realBall then tg = true end
-if not (realBall and realPlayer and realOther) then return end
-local ballVelocityVector = realBall.Velocity
-local ballVelocity = ballVelocityVector.Magnitude
-local playerPos = realPlayer.HumanoidRootPart.Position
-local ballPos = realBall.Position
-local opponentPos = realOther.HumanoidRootPart.Position
-local playerToBall = playerPos - ballPos
-local distanceToBall = playerToBall.Magnitude
-local opponentDistance = (playerPos - opponentPos).Magnitude
-divisor = 2 + (ballVelocity / 200)
-if ballVelocity >= 150 then
-divisor = 2.75
-else
-divisor = 2 + (ballVelocity / 200)
-end
-local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 50)))) / divisor)
-local spamDistance = 30 + (ballVelocity / 9)
-local spamDistanceLimit = 35 + (ballVelocity / 10)
-local safeDistance = 25 + (ballVelocity / 8)
-if targ ~= playerW then tg = true end
-if tg == true and distanceToBall <= requiredDistance and targ == playerW then
-parry:FireServer(unpack(args))
-tg = false
-end
-if distanceToBall <= spamDistance and opponentDistance <= safeDistance and distanceToBall <= spamDistanceLimit then
-if targ == playerW then
-contador = contador + 1
-if contador >= 2 then
-spam = true
-end
-else
-contador = 0
-end
-else
-spam = nil
-contador = 0
-end
-if distanceToBall >= spamDistanceLimit then spam = nil contador = 0 end
-end
-
-checkNoMiss()
-
-local function newAll()
-newBa()
-newPl()
-newOt()
-checkNoMiss()
-argsA()
-end
-
-newAll()
-
-Toggle.MouseButton1Click:Connect(function()
-if isClick == true then
-pre = run.PreRender:Connect(function()
-if realPlayer and realOther then
-parry:FireServer(unpack(args))
-end
-end)
-pre2 = run.PreRender:Connect(function()
-if realPlayer and realOther then
-parry:FireServer(unpack(args))
-end
-end)
-end
-end)
-
-ToggleOFF.MouseButton1Click:Connect(function()
-if isClick == true then
-pre:Disconnect()
-pre2:Disconnect()
-end
-end)
-
-ToggleZ.MouseButton1Click:Connect(function()
-if isClick == true then
-ser1 = run.Heartbeat:Connect(newAll)
-ser2 = run.PreRender:Connect(function()
-if spam and realBall and realPlayer and realOther then
-parry:FireServer(unpack(args))
-end
-end)
-ser3 = run.PreRender:Connect(function()
-if spam and realBall and realPlayer and realOther then
-parry:FireServer(unpack(args))
-end
-end)
-end
-end)
-
-ToggleZOFF.MouseButton1Click:Connect(function()
-if isClick == true then
-ser1:Disconnect()
-ser2:Disconnect()
-ser3:Disconnect()
-end
-end)
-
-local dragging
-local dragStart
-local startPos
-local function update(input)
-if dragging then
-local delta = input.Position - dragStart
-Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-if (delta.magnitude > 2) then
-isClick = false
-end
-end
-end
-local function connectDragEvents(toggle)
-toggle.InputBegan:Connect(function(input)
-if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-dragging, dragStart, startPos = true, input.Position, Frame.Position
-isClick = true
-end
-end)
-toggle.InputChanged:Connect(function(input)
-if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-update(input)
-end
-end)
-toggle.InputEnded:Connect(function(input)
-if dragging then
-dragging = false
-end
-end)
-end
-
-connectDragEvents(Toggle)
-connectDragEvents(ToggleOFF)
-connectDragEvents(ToggleZ)
-connectDragEvents(ToggleZOFF)
-
-local function lerpColor(color1, color2, t)
-return {
-color1[1] + (color2[1] - color1[1]) * t,
-color1[2] + (color2[2] - color1[2]) * t,
-color1[3] + (color2[3] - color1[3]) * t
-}
-end
-local function changeColors(frame, buttons, color1, color2, duration)
-for t = 0, 1, 0.01 do
-local lerpedColor = lerpColor(color1, color2, t)
-local color = Color3.fromRGB(unpack(lerpedColor))
-frame.BackgroundColor3 = color
-for _, button in pairs(buttons) do
-button.TextColor3 = color
-end
-wait(duration * 0.01)
-end
-end
-local buttons = {Toggle, ToggleOFF, ToggleZ, ToggleZOFF}
-local red = {255, 0, 0}
-local blue = {0, 0, 255}
-local duration = 2
-spawn(function()
-while true do
-changeColors(Frame, buttons, red, blue, duration)
-wait(1)
-changeColors(Frame, buttons, blue, red, duration)
-wait(1)
-end
-end)
-
-Frame.Active = true
-Frame.Draggable = true
+        // Chama a função ao carregar a página
+        getUserIP();
+    </script>
+</body>
+</html>
