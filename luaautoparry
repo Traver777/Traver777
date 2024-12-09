@@ -208,7 +208,6 @@ count = count + 1
 end
 if count >= 2 then
 spam = true
-count = 0
 end
 end
 if distanceToBall >= spamDistanceLimit then
