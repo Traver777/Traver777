@@ -1,4 +1,4 @@
- local players = game.Players
+local players = game.Players
 local playerF = players.LocalPlayer
 local playerW = playerF.Name
 
@@ -192,12 +192,13 @@ local opponentPos = realOther.HumanoidRootPart.Position
 local playerToBall = playerPos - ballPos
 local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local required = 22 + (ballVelocity / (2 + (ballVelocity / 190)))
-local spamDistance = 29 + (ballVelocity / 8)
-local spamDistanceLimit = 33 + (ballVelocity / 9)
-local safeDistance = 27 + (ballVelocity / 8)
+local divisor = ballVelocity >= 150 and 2.83 or 2 + (ballVelocity / 200)
+local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 50)))) / divisor)
+local spamDistance = 30 + (ballVelocity / 8)
+local spamDistanceLimit = 34 + (ballVelocity / 9)
+local safeDistance = 25 + (ballVelocity / 7.5)
 if targ ~= playerW then tg = true end
-if tg and distanceToBall <= required and targ == playerW then
+if tg and distanceToBall <= requiredDistance and targ == playerW then
 click()
 tg = false
 end
@@ -229,7 +230,7 @@ newAll()
 
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
-pre = run.PreRender:Connect(function()
+pre = run.RenderStepped:Connect(function()
 if realPlayer and realOther then
 click()
 end
@@ -245,14 +246,14 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.PostSimulation:Connect(newAll)
-ser2 = run.PreRender:Connect(function()
+ser1 = run.Heartbeat:Connect(newAll)
+ser2 = run.Heartbeat:Connect(function()
 if realBall and realPlayer and realOther and spam == true
 then
 click()
 end
 end)
-ser3 = run.PreRender:Connect(function()
+ser3 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam == true
 then
 click()
