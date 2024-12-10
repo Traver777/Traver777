@@ -193,9 +193,9 @@ local playerToBall = playerPos - ballPos
 local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
 local required = 22 + (ballVelocity / (2 + (ballVelocity / 190)))
-local spamDistance = 30 + (ballVelocity / 10)
-local spamDistanceLimit = 35 + (ballVelocity / 10)
-local safeDistance = 27 + (ballVelocity / 10)
+local spamDistance = 29 + (ballVelocity / 8)
+local spamDistanceLimit = 33 + (ballVelocity / 9)
+local safeDistance = 27 + (ballVelocity / 8)
 if targ ~= playerW then tg = true end
 if tg and distanceToBall <= required and targ == playerW then
 click()
