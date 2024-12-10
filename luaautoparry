@@ -195,8 +195,8 @@ local opponentDistance = (playerPos - opponentPos).Magnitude
 local divisor = ballVelocity >= 150 and 2.83 or 2 + (ballVelocity / 200)
 local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 50)))) / divisor)
 local spamDistance = 30 + (ballVelocity / 8)
-local spamDistanceLimit = 35 + (ballVelocity / 8)
-local safeDistance = 30 + (ballVelocity / 8)
+local spamDistanceLimit = 35 + (ballVelocity / 9)
+local safeDistance = 25 + (ballVelocity / 8)
 if targ ~= playerW then tg = true end
 if tg and distanceToBall <= requiredDistance and targ == playerW then
 click()
@@ -206,7 +206,7 @@ if distanceToBall <= spamDistance and opponentDistance <= safeDistance and dista
 if targ == playerW then
 count = count + 1
 end
-if count >= 2 then
+if count >= 1 then
 spam = true
 count = 0
 end
