@@ -198,8 +198,8 @@ local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
 local rqr = 18 + (bvm / (2.8 - (bvm / 450)))
-local spd = 35 + (bvm / 8)
-local sd = 30 + (bvm / 8)
+local spd = 33 + (bvm / 6)
+local sd = 28 + (bvm / 6)
 if targ ~= playerW then tg = true end
 if mtp and tg and db <= rqr and targ == playerW then
 click()
