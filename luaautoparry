@@ -176,8 +176,8 @@ end
 end
 
 local function click()
-local viewportSize = workspace.CurrentCamera.ViewportSize
-local centerX, centerY = viewportSize.X / 2, viewportSize.Y / 2   VirtualInputManager:SendMouseButtonEvent(centerX,centerY, 0, true, game, 0)  VirtualInputManager:SendMouseButtonEvent(centerX,centerY, 0, false, game, 0)
+VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.F, false, game)
+VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.F, false, game)
 end
 
 newBa()
@@ -196,8 +196,8 @@ local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
 local required = 18 + (ballVelocity / (2.6 - (ballVelocity / 500)))
 local spamDistance = 30 + (ballVelocity / 8)
-local spamDistanceLimit = 35 + (ballVelocity / 9)
-local safeDistance = 25 + (ballVelocity / 8)
+local spamDistanceLimit = 35 + (ballVelocity / 10)
+local safeDistance = 27 + (ballVelocity / 8)
 if targ ~= playerW then tg = true end
 if tg and distanceToBall <= required and targ == playerW then
 click()
@@ -205,8 +205,6 @@ tg = false
 end
 if distanceToBall <= spamDistance and opponentDistance <= safeDistance and distanceToBall <= spamDistanceLimit then
 if targ == playerW then
-count = count + 1
-else
 count = count + 1
 end
 if count >= 2 then
