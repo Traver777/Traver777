@@ -194,7 +194,7 @@ local opponentPos = realOther.HumanoidRootPart.Position
 local playerToBall = playerPos - ballPos
 local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local required = 18 + (ballVelocity / (2.9 - (ballVelocity / 400)))
+local required = 18 + (ballVelocity / (2.7 - (ballVelocity / 500)))
 local spamDistance = 30 + (ballVelocity / 8)
 local spamDistanceLimit = 35 + (ballVelocity / 10)
 local safeDistance = 28 + (ballVelocity / 8)
@@ -246,9 +246,14 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.PreAnimation:Connect(newAll)
-ser2 = run.PreAnimation:Connect(newAll)
-ser3 = run.PreRender:Connect(function()
+ser1 = run.Heartbeat:Connect(newAll)
+ser2 = run.RenderStepped:Connect(function()
+if realBall and realPlayer and realOther and spam
+then
+click()
+end
+end)
+ser3 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
