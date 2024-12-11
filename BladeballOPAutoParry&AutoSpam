@@ -30,8 +30,6 @@ local pre = nil
 local ser1 = nil
 local ser2 = nil
 local ser3 = nil
-local ser4 = nil
-local ser5 = nil
 local isClick = true
 local spam = nil
 local tg = true
@@ -199,8 +197,8 @@ local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
 local rqr = 18 + (bvm / (2.4 + ping))
-local spd = 33 + (bvm / 6)
-local sd = 28 + (bvm / 6)
+local spd = 35 + (bvm / 7)
+local sd = 30 + (bvm / 7)
 if targ ~= playerW then tg = true end
 if mtp and tg and db <= rqr and targ == playerW then
 click()
@@ -232,7 +230,7 @@ newAll()
 
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
-pre = run.PreRender:Connect(function()
+pre = run.RenderStepped:Connect(function()
 if realPlayer and realOther then
 click()
 end
@@ -248,16 +246,14 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.PreAnimation:Connect(newAll)
-ser2 = run.PreRender:Connect(newAll)
-ser2 = run.PreSimulation:Connect(newAll)
-ser4 = run.PreRender:Connect(function()
+ser1 = run.RenderStepped:Connect(newAll)
+ser2 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
 end
 end)
-ser5 = run.PreRender:Connect(function()
+ser3 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
@@ -271,8 +267,6 @@ if isClick == true then
 ser1:Disconnect()
 ser2:Disconnect()
 ser3:Disconnect()
-ser4:Disconnect()
-ser5:Disconnect()
 end
 end)
 
