@@ -213,6 +213,8 @@ if count >= 2 then
 spam = true
 count = 0
 end
+else
+spam = false
 end
 end
 
