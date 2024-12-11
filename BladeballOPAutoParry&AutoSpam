@@ -20,6 +20,8 @@ local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
+local player = game.Players.LocalPlayer
+local ping = player:GetNetworkPing() * 20
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -176,8 +178,7 @@ end
 end
 
 local function click()
-local viewportSize = workspace.CurrentCamera.ViewportSize
-local centerX, centerY = viewportSize.X / 2, viewportSize.Y / 2   VirtualInputManager:SendMouseButtonEvent(centerX,centerY, 0, true, game, 0)  VirtualInputManager:SendMouseButtonEvent(centerX,centerY, 0, false, game, 0)
+VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
 end
 
 newBa()
@@ -197,7 +198,7 @@ local op = realOther.HumanoidRootPart.Position
 local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
-local rqr = 18 + (bvm / (2.8 - (bvm / 450)))
+local rqr = 18 + (bvm / (2.4 + ping))
 local spd = 33 + (bvm / 6)
 local sd = 28 + (bvm / 6)
 if targ ~= playerW then tg = true end
@@ -247,16 +248,16 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.RenderStepped:Connect(newAll)
-ser2 = run.Stepped:Connect(newAll)
-ser3 = run.Heartbeat:Connect(newAll)
-ser4 = run.RenderStepped:Connect(function()
+ser1 = run.PreAnimation:Connect(newAll)
+ser2 = run.PreRender:Connect(newAll)
+ser2 = run.PreSimulation:Connect(newAll)
+ser4 = run.PreRender:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
 end
 end)
-ser5 = run.RenderStepped:Connect(function()
+ser5 = run.PreRender:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
