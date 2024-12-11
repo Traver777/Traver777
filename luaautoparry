@@ -194,11 +194,11 @@ local opponentPos = realOther.HumanoidRootPart.Position
 local playerToBall = playerPos - ballPos
 local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local required = 18 + (ballVelocity / (2 + (ballVelocity / 190)))
+local required = 18 + (ballVelocity / (2 + (ballVelocity / 200)))
 if ballVelocity >= 150 then
-required = 18 + (ballVelocity / (2 + (ballVelocity / 140)))
+required = 18 + (ballVelocity / (1.8 + (ballVelocity / 200)))
 else
-required = 18 + (ballVelocity / (2 + (ballVelocity / 190)))
+required = 18 + (ballVelocity / (2 + (ballVelocity / 200)))
 end
 local spamDistance = 32 + (ballVelocity / 8)
 local spamDistanceLimit = 35 + (ballVelocity / 9)
