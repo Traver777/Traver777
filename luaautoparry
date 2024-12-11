@@ -28,9 +28,12 @@ local pre = nil
 local ser1 = nil
 local ser2 = nil
 local ser3 = nil
+local ser4 = nil
+local ser5 = nil
 local isClick = true
 local spam = nil
 local tg = true
+local count = 0
 
 print("sucesss run")
 
@@ -191,19 +194,27 @@ local opponentPos = realOther.HumanoidRootPart.Position
 local playerToBall = playerPos - ballPos
 local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local divisor = ballVelocity >= 150 and 2.83 or 2 + (ballVelocity / 200)
-local requiredDistance = 22 + ((ballVelocity - (distanceToBall / (5 + (ballVelocity / 50)))) / divisor)
-local spamDistance = 30 + (ballVelocity / 8)
-local spamDistanceLimit = 34 + (ballVelocity / 9)
-local safeDistance = 25 + (ballVelocity / 8)
+local required = 18 + (ballVelocity / (2 + (ballVelocity / 190)))
+if ballVelocity >= 150 then
+required = 18 + (ballVelocity / (2 + (ballVelocity / 140)))
+else
+required = 18 + (ballVelocity / (2 + (ballVelocity / 190)))
+end
+local spamDistance = 32 + (ballVelocity / 8)
+local spamDistanceLimit = 35 + (ballVelocity / 9)
+local safeDistance = 30 + (ballVelocity / 8)
 if targ ~= playerW then tg = true end
-if tg and distanceToBall <= requiredDistance and targ == playerW then
+if tg and distanceToBall <= required and targ == playerW then
 click()
 tg = false
 end
 if distanceToBall <= spamDistance and opponentDistance <= safeDistance and distanceToBall <= spamDistanceLimit then
 if targ == playerW then
+count = count + 1
+end
+if count >= 2 then
 spam = true
+count = 0
 end
 end
 if distanceToBall >= spamDistanceLimit then
@@ -253,6 +264,18 @@ then
 click()
 end
 end)
+ser4 = run.PreRender:Connect(function()
+if realBall and realPlayer and realOther and spam
+then
+click()
+end
+end)
+ser5 = run.PreRender:Connect(function()
+if realBall and realPlayer and realOther and spam
+then
+click()
+end
+end)
 end
 end)
 
@@ -261,6 +284,8 @@ if isClick == true then
 ser1:Disconnect()
 ser2:Disconnect()
 ser3:Disconnect()
+ser4:Disconnect()
+ser5:Disconnect()
 end
 end)
 
