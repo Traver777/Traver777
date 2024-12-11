@@ -186,24 +186,23 @@ newOt()
 
 local function checkNoMiss()
 if not (realBall and realPlayer and realOther) then return end
-local ballVelocityVector = realBall.Velocity
-local ballVelocity = ballVelocityVector.Magnitude
-local playerPos = realPlayer.HumanoidRootPart.Position
-local ballPos = realBall.Position
-local opponentPos = realOther.HumanoidRootPart.Position
-local playerToBall = playerPos - ballPos
-local distanceToBall = playerToBall.Magnitude
-local opponentDistance = (playerPos - opponentPos).Magnitude
-local required = 18 + (ballVelocity / (2.7 - (ballVelocity / 500)))
-local spamDistance = 30 + (ballVelocity / 8)
-local spamDistanceLimit = 35 + (ballVelocity / 10)
-local safeDistance = 28 + (ballVelocity / 8)
+local blv = realBall.Velocity
+local bvm = blv.Magnitude
+local pp = realPlayer.HumanoidRootPart.Position
+local bp = realBall.Position
+local op = realOther.HumanoidRootPart.Position
+local ptb = pp - bp
+local db = ptb.Magnitude
+local od = (pp - op).Magnitude
+local rqr = 18 + (bvm / (2.8 - (bvm / 450)))
+local spd = 35 + (bvm / 8)
+local sd = 30 + (bvm / 8)
 if targ ~= playerW then tg = true end
-if tg and distanceToBall <= required and targ == playerW then
+if tg and db <= rqr and targ == playerW then
 click()
 tg = false
 end
-if distanceToBall <= spamDistance and opponentDistance <= safeDistance and distanceToBall <= spamDistanceLimit then
+if db <= spd and od <= sd then
 if targ == playerW then
 count = count + 1
 end
@@ -211,9 +210,6 @@ if count >= 2 then
 spam = true
 count = 0
 end
-end
-if distanceToBall >= spamDistanceLimit then
-spam = false
 end
 end
 
