@@ -196,7 +196,7 @@ local op = realOther.HumanoidRootPart.Position
 local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
-local rqr = 18 + (bvm / (2.4 + ping))
+local rqr = 18 + (bvm / (2.4 - ping))
 local spd = 35 + (bvm / 7)
 local sd = 30 + (bvm / 7)
 if targ ~= playerW then tg = true end
