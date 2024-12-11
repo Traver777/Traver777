@@ -194,10 +194,10 @@ local opponentPos = realOther.HumanoidRootPart.Position
 local playerToBall = playerPos - ballPos
 local distanceToBall = playerToBall.Magnitude
 local opponentDistance = (playerPos - opponentPos).Magnitude
-local required = 18 + (ballVelocity / (2.1 - (ballVelocity / 400)))
-local spamDistance = 32 + (ballVelocity / 8)
+local required = 18 + (ballVelocity / (2.4 - (ballVelocity / 500)))
+local spamDistance = 30 + (ballVelocity / 8)
 local spamDistanceLimit = 35 + (ballVelocity / 9)
-local safeDistance = 30 + (ballVelocity / 8)
+local safeDistance = 25 + (ballVelocity / 8)
 if targ ~= playerW then tg = true end
 if tg and distanceToBall <= required and targ == playerW then
 click()
@@ -205,6 +205,8 @@ tg = false
 end
 if distanceToBall <= spamDistance and opponentDistance <= safeDistance and distanceToBall <= spamDistanceLimit then
 if targ == playerW then
+count = count + 1
+else
 count = count + 1
 end
 if count >= 2 then
