@@ -198,8 +198,8 @@ local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
 local rqr = 18 + (bvm / (2.8 - (bvm / 450)))
-local spd = 40 + (bvm / 8)
-local sd = 35 + (bvm / 8)
+local spd = 35 + (bvm / 8)
+local sd = 30 + (bvm / 8)
 if targ ~= playerW then tg = true end
 if mtp and tg and db <= rqr and targ == playerW then
 click()
@@ -247,26 +247,16 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.Heartbeat:Connect(newAll)
-ser2 = run.RenderStepped:Connect(function()
+ser1 = run.RenderStepped:Connect(newAll)
+ser2 = run.Stepped:Connect(newAll)
+ser3 = run.Heartbeat:Connect(newAll)
+ser4 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
 end
 end)
-ser3 = run.RenderStepped:Connect(function()
-if realBall and realPlayer and realOther and spam
-then
-click()
-end
-end)
-ser4 = run.PreRender:Connect(function()
-if realBall and realPlayer and realOther and spam
-then
-click()
-end
-end)
-ser5 = run.PreRender:Connect(function()
+ser5 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
