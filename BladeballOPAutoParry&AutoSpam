@@ -196,6 +196,11 @@ local mtp = drp:Dot(bd) >= 0
 local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
+if bvm >= 180 then
+mtp = true
+else
+mtp = drp:Dot(bd) >= 0
+end
 local rqr = (19 + (bvm / (2.5 - (bvm / 600))))
 local spd = 35 + (bvm / 5.5)
 local sd = 30 + (bvm / 5.5)
