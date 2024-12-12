@@ -196,7 +196,7 @@ local od = (pp - op).Magnitude
 local dtrqd = (2.5 - (bvm / 200))
 dtrqd = math.clamp(dtrqd, 1,5, 2,5)
 local dtrq = db / dtrqd
-local rqr = ((25 - (bvm / 20)) + (bvm / (2.5 - (bvm / 600)))) - dtrq
+local rqr = (30 + (bvm / (2.1 - (bvm / 600)))) - dtrq
 local spd = 35 + (bvm / 6)
 local sd = 30 + (bvm / 6)
 if targ ~= playerW then tg = true end
