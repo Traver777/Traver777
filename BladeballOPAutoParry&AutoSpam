@@ -28,6 +28,8 @@ local pre = nil
 local ser1 = nil
 local ser2 = nil
 local ser3 = nil
+local ser4 = nil
+local ser5 = nil
 local isClick = true
 local spam = nil
 local tg = true
@@ -241,14 +243,21 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.Heartbeat:Connect(newAll)
-ser2 = run.RenderStepped:Connect(function()
+ser1 = run.PreAnimation:Connect(newAll)
+ser2 = run.PostSimulation:Connect(newAll)
+ser3 = run.PreAnimation:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
 end
 end)
-ser3 = run.RenderStepped:Connect(function()
+ser4 = run.RenderStepped:Connect(function()
+if realBall and realPlayer and realOther and spam
+then
+click()
+end
+end)
+ser5 = run.PreRender:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
@@ -262,6 +271,8 @@ if isClick == true then
 ser1:Disconnect()
 ser2:Disconnect()
 ser3:Disconnect()
+ser4:Disconnect()
+ser5:Disconnect()
 end
 end)
 
