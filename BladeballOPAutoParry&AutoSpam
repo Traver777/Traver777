@@ -251,9 +251,9 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.Heartbeat:Connect(newAll)
-ser2 = run.Heartbeat:Connect(newAll)
-ser3 = run.PreAnimation:Connect(function()
+ser1 = run.Stepped:Connect(newAll)
+ser2 = run.Stepped:Connect(newAll)
+ser3 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
@@ -265,7 +265,7 @@ then
 click()
 end
 end)
-ser5 = run.PreRender:Connect(function()
+ser5 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
