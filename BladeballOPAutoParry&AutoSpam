@@ -20,8 +20,6 @@ local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
-local player = game.Players.LocalPlayer
-local ping = player:GetNetworkPing() * 20
 local realBall = nil
 local realPlayer = nil
 local realOther = nil
@@ -187,20 +185,17 @@ local function checkNoMiss()
 if not (realBall and realPlayer and realOther) then return end
 local blv = realBall.Velocity
 local bvm = blv.Magnitude
-local pp = realPlayer.HumanoidRootPart.Position
+local pp = realPlayer.Torso.Position
 local bp = realBall.Position
-local drp = (pp - bp).Unit
-local bd = blv.Unit
-local mtp = drp:Dot(bd) > 0
-local op = realOther.HumanoidRootPart.Position
+local op = realOther.Torso.Position
 local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
-local rqr = 18 + (bvm / (2.4 - ping))
-local spd = 35 + (bvm / 7)
-local sd = 30 + (bvm / 7)
+local rqr = (22 + (bvm / (2.5 - (bvm / 600)))) - (db / 2.5)
+local spd = 35 + (bvm / 6)
+local sd = 30 + (bvm / 6)
 if targ ~= playerW then tg = true end
-if mtp and tg and db <= rqr and targ == playerW then
+if tg and db <= rqr and targ == playerW then
 click()
 tg = false
 end
@@ -210,10 +205,10 @@ count = count + 1
 end
 if count >= 2 then
 spam = true
-count = 0
 end
 else
 spam = false
+count = 0
 end
 end
 
@@ -246,7 +241,7 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.RenderStepped:Connect(newAll)
+ser1 = run.Heartbeat:Connect(newAll)
 ser2 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
