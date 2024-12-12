@@ -196,7 +196,7 @@ local mtp = drp:Dot(bd) >= 0
 local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
-if bvm >= 250 then
+if bvm >= 300 then
 mtp = true
 else
 mtp = drp:Dot(bd) >= 0
