@@ -246,8 +246,8 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.PreAnimation:Connect(newAll)
-ser2 = run.PostSimulation:Connect(newAll)
+ser1 = run.Heartbeat:Connect(newAll)
+ser2 = run.Heartbeat:Connect(newAll)
 ser3 = run.PreAnimation:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
