@@ -190,22 +190,14 @@ local bvm = blv.Magnitude
 local pp = realPlayer.Torso.Position
 local bp = realBall.Position
 local op = realOther.Torso.Position
-local drp = (pp - bp).Unit
-local bd = blv.Unit
-local mtp = drp:Dot(bd) >= 0
 local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
-if bvm >= 300 then
-mtp = true
-else
-mtp = drp:Dot(bd) >= 0
-end
-local rqr = (19 + (bvm / (2.5 - (bvm / 600))))
+local rqr = (35 + (bvm / (2.5 - (bvm / 600)))) - (db / 2.1)
 local spd = 35 + (bvm / 5.5)
 local sd = 30 + (bvm / 5.5)
 if targ ~= playerW then tg = true end
-if mtp and tg and db <= rqr and targ == playerW then
+if tg and db <= rqr and targ == playerW then
 click()
 tg = false
 end
