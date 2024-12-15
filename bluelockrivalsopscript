@@ -1,4 +1,4 @@
-local run = game:GetService("RunService")
+local runserviceone = game:GetService("RunService")
 local args = nil
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
@@ -105,7 +105,7 @@ end)
 
 local waiting = true
 
-run.PreRender:Connect(function()
+runserviceone.PreRender:Connect(function()
 if autodrible == true and waiting == true then
 game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Dribble"):FireServer()
 waiting = false
