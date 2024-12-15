@@ -105,7 +105,7 @@ end)
 
 local waiting = true
 
-runservice.PreRender:Connect(function()
+run.PreRender:Connect(function()
 if autodrible == true and waiting == true then
 game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Dribble"):FireServer()
 waiting = false
