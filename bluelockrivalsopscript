@@ -109,7 +109,7 @@ runservice.PreRender:Connect(function()
 if autodrible == true and waiting == true then
 game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Dribble"):FireServer()
 waiting = false
-wait(0.4)
+wait(0.35)
 waiting = true
 end
 end)
