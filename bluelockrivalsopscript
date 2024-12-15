@@ -1,0 +1,113 @@
+local run = game:GetService("RunService")
+local args = nil
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local Toggle = Instance.new("TextButton")
+local Toggle1 = Instance.new("TextButton")
+local Toggle1OFF = Instance.new("TextButton")
+local autodrible = false
+
+ScreenGui.Parent = game:GetService('CoreGui')
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(17, 17, 17)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.2012012, 0, 0.343128483, 0)
+Frame.Size = UDim2.new(0, 85, 0, 135)
+
+Toggle.Name = "Toggle"
+Toggle.Parent = Frame
+Toggle.BackgroundColor3 = Color3.fromRGB(196, 40, 28)
+Toggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Toggle.BorderSizePixel = 0
+Toggle.Position = UDim2.new(0.08312012, 0, 0.083128483, 0)
+Toggle.Size = UDim2.new(0, 70, 0, 35)
+Toggle.Visible = true
+Toggle.Font = Enum.Font.Bodoni
+Toggle.Text = "Shoot"
+Toggle.TextColor3 = Color3.fromRGB(0, 0, 0)
+Toggle.TextSize = 20.000
+Toggle.TextWrapped = true
+
+Toggle1.Name = "Toggle"
+Toggle1.Parent = Frame
+Toggle1.BackgroundColor3 = Color3.fromRGB(196, 40, 28)
+Toggle1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Toggle1.BorderSizePixel = 0
+Toggle1.Position = UDim2.new(0.08312012, 0, 0.723128483, 0)
+Toggle1.Size = UDim2.new(0, 70, 0, 35)
+Toggle1.Visible = true
+Toggle1.Font = Enum.Font.Bodoni
+Toggle1.Text = "AutoDrible"
+Toggle1.TextColor3 = Color3.fromRGB(0, 0, 0)
+Toggle1.TextSize = 15.000
+Toggle1.TextWrapped = true
+Toggle1.MouseButton1Click:Connect(function()
+Toggle1.Visible = false
+Toggle1OFF.Visible = true
+autodrible = true
+end)
+
+Toggle1OFF.Name = "Toggle"
+Toggle1OFF.Parent = Frame
+Toggle1OFF.BackgroundColor3 = Color3.fromRGB(196, 40, 28)
+Toggle1OFF.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Toggle1OFF.BorderSizePixel = 0
+Toggle1OFF.Position = UDim2.new(0.08312012, 0, 0.723128483, 0)
+Toggle1OFF.Size = UDim2.new(0, 70, 0, 35)
+Toggle1OFF.Visible = false
+Toggle1OFF.Font = Enum.Font.Bodoni
+Toggle1OFF.Text = "TurnOff"
+Toggle1OFF.TextColor3 = Color3.fromRGB(0, 0, 0)
+Toggle1OFF.TextSize = 15.000
+Toggle1OFF.TextWrapped = true
+Toggle1OFF.MouseButton1Click:Connect(function()
+Toggle1.Visible = true
+Toggle1OFF.Visible = false
+autodrible = false
+end)
+
+local TextBox = Instance.new("TextBox")
+TextBox.Name = "TextBox"
+TextBox.Parent = Frame
+TextBox.BackgroundColor3 = Color3.fromRGB(196, 40, 28)
+TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.BorderSizePixel = 0
+TextBox.Position = UDim2.new(0.08312012, 0, 0.405128483, 0)
+TextBox.Size = UDim2.new(0, 70, 0, 35)
+TextBox.Font = Enum.Font.Bodoni
+TextBox.PlaceholderText = "SetForce"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextBox.TextSize = 20.000
+TextBox.TextWrapped = true
+
+local function argsA()
+args = {
+[1] = tonumber(TextBox.Text),
+[4] = workspace.Goals.Home.CFrame
+}
+end
+
+local function shoot()
+game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Shoot"):FireServer(unpack(args))
+end
+
+run.Heartbeat:Connect(function()
+argsA()
+end)
+
+Toggle.MouseButton1Click:Connect(function()
+shoot()
+end)
+
+while wait(0.4) do
+if autodrible == true then
+game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Dribble"):FireServer()
+end
+end
+
+Frame.Active = true
+Frame.Draggable = true
