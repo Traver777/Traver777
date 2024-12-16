@@ -103,16 +103,11 @@ Toggle.MouseButton1Click:Connect(function()
 shoot()
 end)
 
-local waiting = true
-
-run.PreRender:Connect(function()
-if autodrible == true and waiting == true then
-game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Dribble"):FireServer()
-waiting = false
-wait(0.2)
-waiting = true
-end
-end)
-
 Frame.Active = true
 Frame.Draggable = true
+
+while wait(0.3) do
+if autodrible == true then
+game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("BallService"):WaitForChild("RE"):WaitForChild("Dribble"):FireServer()
+end
+end
