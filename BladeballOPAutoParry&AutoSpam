@@ -196,8 +196,8 @@ local dtrqd = (2.5 - (bvm / 400))
 dtrqd = math.clamp(dtrqd, 1,5, 2,5)
 local dtrq = db / dtrqd
 local rqr = (30 + (bvm / (2.1 - (bvm / 600)))) - dtrq
-local spd = 30 + (bvm / 10)
-local sd = 25 + (bvm / 10)
+local spd = 25 + (bvm / 10)
+local sd = 20 + (bvm / 15)
 if targ ~= playerW then tg = true end
 if tg and db <= rqr and targ == playerW then
 click()
