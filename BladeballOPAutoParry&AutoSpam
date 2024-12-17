@@ -195,14 +195,17 @@ local op = realOther.Torso.Position
 local ptb = pp - bp
 local db = ptb.Magnitude
 local od = (pp - op).Magnitude
-local dtrqd = (2.5 - (bvm / 400))
+local drp = (pp - bp).Unit
+local bd = blv.Unit
+local mtp = drp:Dot(bd) > 0
+local dtrqd = (2.5 - (bvm / 450))
 dtrqd = math.clamp(dtrqd, 1,5, 2,5)
 local dtrq = db / dtrqd
 local rqr = (30 + (bvm / (2.1 - (bvm / 600)))) - dtrq
 local spd = 35 + (bvm / 8)
 local sd = 30 + (bvm / 8)
 if targ ~= playerW then tg = true end
-if tg and db <= rqr and targ == playerW then
+if tg and mtp and db <= rqr and targ == playerW then
 click()
 tg = false
 end
@@ -252,11 +255,15 @@ end)
 
 ToggleZ.MouseButton1Click:Connect(function()
 if isClick == true then
-ser1 = run.Heartbeat:Connect(newAll)
-ser2 = run.Heartbeat:Connect(newAll)
+ser1 = run.Stepped:Connect(newAll,newAll,newAll)
+ser2 = run.Stepped:Connect(newAll,newAll,newAll)
 ser3 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
+click()
+click()
+click()
+click()
 click()
 end
 end)
@@ -264,11 +271,19 @@ ser4 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
+click()
+click()
+click()
+click()
 end
 end)
 ser5 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
+click()
+click()
+click()
+click()
 click()
 end
 end)
