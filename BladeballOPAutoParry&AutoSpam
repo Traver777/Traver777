@@ -182,6 +182,9 @@ newBa()
 newPl()
 newOt()
 
+local cnt = 0
+local tn = true
+
 local function checkNoMiss()
 if not (realBall and realPlayer and realOther) then return end
 local blv = realBall.Velocity
@@ -196,19 +199,27 @@ local dtrqd = (2.5 - (bvm / 400))
 dtrqd = math.clamp(dtrqd, 1,5, 2,5)
 local dtrq = db / dtrqd
 local rqr = (30 + (bvm / (2.1 - (bvm / 600)))) - dtrq
-local spd = 25 + (bvm / 10)
-local sd = 20 + (bvm / 15)
+local spd = 35 + (bvm / 8)
+local sd = 30 + (bvm / 8)
 if targ ~= playerW then tg = true end
 if tg and db <= rqr and targ == playerW then
 click()
 tg = false
 end
 if db <= spd and od <= sd then
-if targ == playerW then
+if targ ~= playerW then
+tn = true
+end
+if cnt < 2 and tn == true and targ == playerW then
+cnt = cnt + 1
+tn = false
+end
+if cnt == 2 then
 spam = true
 end
 else
 spam = false
+cnt = 0
 end
 end
 
