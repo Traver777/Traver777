@@ -31,7 +31,7 @@ local ser3 = nil
 local ser4 = nil
 local ser5 = nil
 local isClick = true
-local spam = nil
+local spam = false
 local tg = true
 
 print("sucesss run")
@@ -187,9 +187,6 @@ newBa()
 newPl()
 newOt()
 
-local cnt = 0
-local tn = true
-
 local function checkNoMiss()
 if not (realBall and realPlayer and realOther) then return end
 local blv = realBall.Velocity
@@ -204,8 +201,8 @@ local dtrqd = (2.5 - (bvm / 450))
 dtrqd = math.clamp(dtrqd, 1,5, 2,5)
 local dtrq = db / dtrqd
 local rqr = (30 + (bvm / (2.1 - (bvm / 600)))) - dtrq
-local spd = 35 + (bvm / 6)
-local sd = 30 + (bvm / 6)
+local spd = 25 + (bvm / 10)
+local sd = 20 + (bvm / 10)
 if targ ~= playerW then tg = true end
 if tg and db <= rqr and targ == playerW then
 click()
@@ -213,18 +210,10 @@ tg = false
 end
 if db <= spd and od <= sd then
 if targ ~= playerW then
-tn = true
-end
-if cnt < 2 and tn == true and targ == playerW then
-cnt = cnt + 1
-tn = false
-end
-if cnt == 2 then
 spam = true
 end
 else
 spam = false
-cnt = 0
 end
 end
 
