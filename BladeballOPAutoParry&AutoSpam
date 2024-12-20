@@ -252,29 +252,17 @@ ser3 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
-click()
-click()
-click()
-click()
 end
 end)
 ser4 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
 click()
-click()
-click()
-click()
-click()
 end
 end)
 ser5 = run.RenderStepped:Connect(function()
 if realBall and realPlayer and realOther and spam
 then
-click()
-click()
-click()
-click()
 click()
 end
 end)
