@@ -175,7 +175,12 @@ end
 end
 
 local function click()
-VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+local screenWidth = workspace.CurrentCamera.ViewportSize.X
+local screenHeight = workspace.CurrentCamera.ViewportSize.Y
+local centerX = screenWidth / 2
+local centerY = screenHeight / 2
+VirtualInputManager:SendMouseButtonEvent(centerX, centerY, 0, true, game, 0)
+VirtualInputManager:SendMouseButtonEvent(centerX, centerY, 0, false, game, 0)
 end
 
 newBa()
