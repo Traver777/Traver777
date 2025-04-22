@@ -33,6 +33,7 @@ local ser5 = nil
 local isClick = true
 local spam = false
 local tg = true
+local cont = 0
 
 print("sucesss run")
 
@@ -210,10 +211,14 @@ tg = false
 end
 if db <= spd and od <= sd then
 if targ ~= playerW then
-spam = true
+cont = cont + 1
 end
 else
 spam = false
+end
+if cont >= 2 then
+spam = true
+cont = 0
 end
 end
 
