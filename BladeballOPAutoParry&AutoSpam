@@ -2,8 +2,10 @@ local players = game.Players
 local playerF = players.LocalPlayer
 local playerW = playerF.Name
 
-game:GetService("ReplicatedStorage").Security.RemoteEvent:Destroy() game:GetService("ReplicatedStorage").Security[""]:Destroy()
-game:GetService("ReplicatedStorage").Security:Destroy() game:GetService("Players").LocalPlayer.PlayerScripts.Client.DeviceChecker:Destroy()
+game:GetService("ReplicatedStorage").Security.RemoteEvent:Destroy()
+game:GetService("ReplicatedStorage").Security[""]:Destroy()
+game:GetService("ReplicatedStorage").Security:Destroy()
+game:GetService("Players").LocalPlayer.PlayerScripts.Client.DeviceChecker:Destroy()
 
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
@@ -20,20 +22,7 @@ local aliveFolder = workspace:WaitForChild("Alive")
 local ballsFolder = workspace:WaitForChild("Balls")
 local run = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
-local realBall = nil
-local realPlayer = nil
-local realOther = nil
-local targ = nil
-local pre = nil
-local ser1 = nil
-local ser2 = nil
-local ser3 = nil
-local ser4 = nil
-local ser5 = nil
 local isClick = true
-local spam = false
-local tg = true
-local cont = 0
 
 print("sucesss run")
 
@@ -139,22 +128,34 @@ ToggleZ.Visible = true
 end
 end)
 
+local realBall
+local realPlayer
+local realOther
+local targ = nil
+local tg = true
+local tg2 = true
+local spam = false
+local pre = nil
+local pre2 = nil
+local ser1 = nil
+local ser2 = nil
+local ser3 = nil
+local count = 0
+
 local function newBa()
-local balls = ballsFolder:GetChildren()
 realBall = nil
-for _, ball in ipairs(balls) do
-if ball:GetAttribute("realBall") == true then
+for _, ball in ipairs(ballsFolder:GetChildren()) do
+if ball:GetAttribute("realBall") then
 realBall = ball
-targ = realBall:GetAttribute("target")
+targ = ball:GetAttribute("target")
 break
 end
 end
 end
 
 local function newPl()
-local alive = aliveFolder:GetChildren()
 realPlayer = nil
-for _, ply in ipairs(alive) do
+for _, ply in ipairs(aliveFolder:GetChildren()) do
 if ply.Name == playerW then
 realPlayer = ply
 break
@@ -163,12 +164,9 @@ end
 end
 
 local function newOt()
-local alive = aliveFolder:GetChildren()
 realOther = nil
-local others = {}
-for _, other in pairs(alive) do
+for _, other in ipairs(aliveFolder:GetChildren()) do
 if other.Name ~= playerW then
-table.insert(others,other)
 realOther = other
 break
 end
@@ -176,17 +174,11 @@ end
 end
 
 local function click()
-local screenWidth = workspace.CurrentCamera.ViewportSize.X
-local screenHeight = workspace.CurrentCamera.ViewportSize.Y
-local centerX = screenWidth / 2
-local centerY = screenHeight / 2
-VirtualInputManager:SendMouseButtonEvent(centerX, centerY, 0, true, game, 0)
-VirtualInputManager:SendMouseButtonEvent(centerX, centerY, 0, false, game, 0)
+local cam = workspace.CurrentCamera
+local cx, cy = cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2
+VirtualInputManager:SendMouseButtonEvent(cx, cy, 0, true, game, 0)
+VirtualInputManager:SendMouseButtonEvent(cx, cy, 0, false, game, 0)
 end
-
-newBa()
-newPl()
-newOt()
 
 local function checkNoMiss()
 if not (realBall and realPlayer and realOther) then return end
@@ -195,34 +187,32 @@ local bvm = blv.Magnitude
 local pp = realPlayer.Torso.Position
 local bp = realBall.Position
 local op = realOther.Torso.Position
-local ptb = pp - bp
-local db = ptb.Magnitude
+local db = (pp - bp).Magnitude
 local od = (pp - op).Magnitude
-local dtrqd = (2.5 - (bvm / 450))
-dtrqd = math.clamp(dtrqd, 1,5, 2,5)
-local dtrq = db / dtrqd
-local rqr = (30 + (bvm / (2.1 - (bvm / 600)))) - dtrq
-local spd = 30 + (bvm / 10)
-local sd = 25 + (bvm / 10)
+local ballToPlayer = (pp - bp).Unit
+local dot = blv.Unit:Dot(ballToPlayer)
+local baseDist = 22 + (bvm / (2.1 + (bvm / 600)))
+local br = db <= baseDist and dot >= 0
+local calc = bvm / (2.0 + (bvm / 90))
+local br2, br3 = 25 + (bvm / 7), 30 + (bvm / 7)
+if (bvm >= 300) or (bvm >= 35 and db < calc) then
+br = db <= 22 + (bvm / (2.1 + (bvm / 600)))
+end
+if bvm >= 35 and db >= calc and bvm < 300 then
+br = db <= 22 + (bvm / (2.1 + (bvm / 600))) and dot >= 0
+end
 if targ ~= playerW then tg = true end
-if tg and db <= rqr and targ == playerW then
+if tg and targ == playerW and br then
 click()
 tg = false
 end
-if db <= spd and od <= sd then
-if targ ~= playerW then
-cont = cont + 1
+if targ == playerW and od <= br2 and db <= br3 then
+spam = true
 end
-else
+if db > br3 then
 spam = false
 end
-if cont >= 2 then
-spam = true
-cont = 0
 end
-end
-
-checkNoMiss()
 
 local function newAll()
 newBa()
@@ -235,8 +225,31 @@ newAll()
 
 Toggle.MouseButton1Click:Connect(function()
 if isClick == true then
-pre = run.RenderStepped:Connect(function()
+pre = run.PreRender:Connect(function()
 if realPlayer and realOther then
+click()
+end
+end)
+pre2 = run.PreRender:Connect(function()
+if realPlayer and realOther then
+click()
+end
+end)
+end
+end)
+
+ToggleZ.MouseButton1Click:Connect(function()
+if isClick == true then
+ser1 = run.PostSimulation:Connect(newAll)
+ser2 = run.PreRender:Connect(function()
+if realBall and realPlayer and realOther and spam
+then
+click()
+end
+end)
+ser3 = run.PreRender:Connect(function()
+if realBall and realPlayer and realOther and spam
+then
 click()
 end
 end)
@@ -246,31 +259,7 @@ end)
 ToggleOFF.MouseButton1Click:Connect(function()
 if isClick == true then
 pre:Disconnect()
-end
-end)
-
-ToggleZ.MouseButton1Click:Connect(function()
-if isClick == true then
-ser1 = run.PostSimulation:Connect(newAll)
-ser2 = run.PostSimulation:Connect(newAll)
-ser3 = run.PreRender:Connect(function()
-if realBall and realPlayer and realOther and spam
-then
-click()
-end
-end)
-ser4 = run.PreRender:Connect(function()
-if realBall and realPlayer and realOther and spam
-then
-click()
-end
-end)
-ser5 = run.PreRender:Connect(function()
-if realBall and realPlayer and realOther and spam
-then
-click()
-end
-end)
+pre2:Disconnect()
 end
 end)
 
@@ -279,8 +268,6 @@ if isClick == true then
 ser1:Disconnect()
 ser2:Disconnect()
 ser3:Disconnect()
-ser4:Disconnect()
-ser5:Disconnect()
 end
 end)
 
@@ -290,7 +277,8 @@ local startPos
 local function update(input)
 if dragging then
 local delta = input.Position - dragStart
-Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+Frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale,
+startPos.Y.Offset + delta.Y)
 if (delta.magnitude > 2) then
 isClick = false
 end
@@ -325,7 +313,7 @@ return {
 color1[1] + (color2[1] - color1[1]) * t,
 color1[2] + (color2[2] - color1[2]) * t,
 color1[3] + (color2[3] - color1[3]) * t
-}
+  }
 end
 local function changeColors(frame, buttons, color1, color2, duration)
 for t = 0, 1, 0.01 do
@@ -338,9 +326,9 @@ end
 wait(duration * 0.01)
 end
 end
-local buttons = {Toggle, ToggleOFF, ToggleZ, ToggleZOFF}
-local red = {255, 0, 0}
-local blue = {0, 0, 255}
+local buttons = { Toggle, ToggleOFF, ToggleZ, ToggleZOFF }
+local red = { 255, 0, 0 }
+local blue = { 0, 0, 255 }
 local duration = 2
 spawn(function()
 while true do
